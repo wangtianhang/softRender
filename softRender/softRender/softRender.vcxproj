@@ -69,9 +69,11 @@
   <ItemGroup>
     <ClCompile Include="colorBuffer.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="rasterization.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="colorBuffer.h" />
+    <ClInclude Include="rasterization.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

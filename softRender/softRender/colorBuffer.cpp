@@ -5,6 +5,7 @@
 #include "colorBuffer.h"
 
 
+
 ColorBuffer::ColorBuffer(int width, int height)
 {
 	m_width = width;
@@ -14,8 +15,8 @@ ColorBuffer::ColorBuffer(int width, int height)
 
 void ColorBuffer::SetPixel(int x, int y, D3DCOLOR color)
 {
-	int convertY = m_height - y - 1;
-	m_pBuffer[convertY * m_width + x] = color;
+	//int convertY = m_height - y - 1;
+	m_pBuffer[y * m_width + x] = color;
 }
 
 void ColorBuffer::CopyBufferToSurface(LPDIRECT3DSURFACE9 pSurface)

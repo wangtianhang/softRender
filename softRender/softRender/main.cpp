@@ -7,6 +7,7 @@
 #include <math.h>
 
 #include "colorBuffer.h"
+#include "rasterization.h"
 
 #pragma comment(lib, "dxerr.lib")
 #pragma comment(lib, "d3d9.lib")
@@ -91,41 +92,7 @@ VOID Cleanup()
 		g_pD3D->Release();
 }
 
-void lineBres(int x0, int y0, int xEnd, int yEnd, ColorBuffer * pColorBuffer)
-{
-	int dx = abs(xEnd - x0), dy = abs(yEnd - y0);
-	int p = 2 * dy - dx;
-	int twoDy = 2 * dy, twoDyMinusDx = 2 * (dy - dx);
-	int x, y;
-	if (x0 > xEnd)
-	{
-		x = xEnd;
-		y = yEnd;
-		xEnd = x0;
-	}
-	else
-	{
-		x = x0;
-		y = y0;
-	}
 
-	pColorBuffer->SetPixel(x, y, D3DCOLOR_ARGB(255, 255, 0, 0));
-
-	while (x < xEnd)
-	{
-		x++;
-		if (p < 0)
-		{
-			p += twoDy;
-		}
-		else
-		{
-			y++;
-			p += twoDyMinusDx;
-		}
-		pColorBuffer->SetPixel(x, y, D3DCOLOR_ARGB(255, 255, 0, 0));
-	}
-}
 
 
 //-----------------------------------------------------------------------------
@@ -158,7 +125,18 @@ VOID Render()
 
 	g_backBuffer->UnlockRect();*/
 
-	lineBres(10, 10, 20, 20, g_colorBuffer);
+	//lineBres(10, 10, 20, 20, g_colorBuffer);
+	SRColor red;
+	red.a = 1;
+	red.r = 1;
+	SRColor green;
+	green.a = 1;
+	green.g = 1;
+	SRColor blue;
+	blue.a = 1;
+	blue.b = 1;
+
+	DrawTriangle(100, 200, red, 200, 100, green, 200, 300, blue);
 
 	g_colorBuffer->CopyBufferToSurface(g_backBuffer);
 
