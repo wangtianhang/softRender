@@ -3,7 +3,7 @@
 #define RASTERIZATION
 
 #include <math.h>
-#include "colorBuffer.h"
+#include "SRColorBuffer.h"
 
 void lineBres(int x0, int y0, int xEnd, int yEnd);
 

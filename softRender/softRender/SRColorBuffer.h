@@ -29,11 +29,11 @@ public:
 	}
 };
 
-class ColorBuffer
+class SRColorBuffer
 {
 
 public:
-	ColorBuffer(int width, int height);
+	SRColorBuffer(int width, int height);
 	void SetPixel(int x, int y, D3DCOLOR color);
 	void CopyBufferToSurface(LPDIRECT3DSURFACE9 pSurface);
 private:

@@ -2,24 +2,24 @@
 #include <d3d9.h>
 #include <DxErr.h>
 
-#include "colorBuffer.h"
+#include "SRColorBuffer.h"
 
 
 
-ColorBuffer::ColorBuffer(int width, int height)
+SRColorBuffer::SRColorBuffer(int width, int height)
 {
 	m_width = width;
 	m_height = height;
 	m_pBuffer = new D3DCOLOR[width * height]();
 }
 
-void ColorBuffer::SetPixel(int x, int y, D3DCOLOR color)
+void SRColorBuffer::SetPixel(int x, int y, D3DCOLOR color)
 {
 	//int convertY = m_height - y - 1;
 	m_pBuffer[y * m_width + x] = color;
 }
 
-void ColorBuffer::CopyBufferToSurface(LPDIRECT3DSURFACE9 pSurface)
+void SRColorBuffer::CopyBufferToSurface(LPDIRECT3DSURFACE9 pSurface)
 {
 	D3DLOCKED_RECT pRect;
 	HRESULT ret3 = pSurface->LockRect(&pRect, NULL, NULL);

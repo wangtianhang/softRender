@@ -18,18 +18,18 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="colorBuffer.cpp">
+    <ClCompile Include="SRColorBuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="rasterization.cpp">
+    <ClCompile Include="SRRasterization.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="colorBuffer.h">
+    <ClInclude Include="SRColorBuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="rasterization.h">
+    <ClInclude Include="SRRasterization.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

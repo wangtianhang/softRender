@@ -1,6 +1,6 @@
-#include "rasterization.h"
+#include "SRRasterization.h"
 
-extern ColorBuffer * g_colorBuffer;
+extern SRColorBuffer * g_colorBuffer;
 
 inline float GetWeight(int x0, int y0, int x1, int y1, int x, int y)
 {

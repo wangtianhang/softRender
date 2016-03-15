@@ -6,8 +6,8 @@
 
 #include <math.h>
 
-#include "colorBuffer.h"
-#include "rasterization.h"
+#include "SRColorBuffer.h"
+#include "SRRasterization.h"
 
 #pragma comment(lib, "dxerr.lib")
 #pragma comment(lib, "d3d9.lib")
@@ -21,7 +21,7 @@ LPDIRECT3DDEVICE9       g_pd3dDevice = NULL; // Our rendering device
 //LPDIRECT3DVERTEXBUFFER9 g_pVB = NULL; // Buffer to hold Vertices
 //LPDIRECT3DSURFACE9  g_offLineBuffer = NULL;
 LPDIRECT3DSURFACE9  g_backBuffer = NULL;
-ColorBuffer * g_colorBuffer = NULL;
+SRColorBuffer * g_colorBuffer = NULL;
 
 // A structure for our custom vertex type
 //struct CUSTOMVERTEX
@@ -67,7 +67,7 @@ HRESULT InitD3D(HWND hWnd)
 		return E_FAIL;
 	}
 
-	g_colorBuffer = new ColorBuffer(640, 480);
+	g_colorBuffer = new SRColorBuffer(640, 480);
 
 	// Device state would normally be set here
 	//g_pd3dDevice->CreateOffscreenPlainSurface(300, 300, D3DFMT_A8R8G8B8, D3DPOOL_DEFAULT, &g_offLineBuffer, NULL);
@@ -92,7 +92,21 @@ VOID Cleanup()
 		g_pD3D->Release();
 }
 
+void RenderContent()
+{
+	//lineBres(10, 10, 20, 20, g_colorBuffer);
+	SRColor red;
+	red.a = 1;
+	red.r = 1;
+	SRColor green;
+	green.a = 1;
+	green.g = 1;
+	SRColor blue;
+	blue.a = 1;
+	blue.b = 1;
 
+	DrawTriangle(100, 200, red, 200, 100, green, 200, 300, blue);
+}
 
 
 //-----------------------------------------------------------------------------
@@ -125,18 +139,7 @@ VOID Render()
 
 	g_backBuffer->UnlockRect();*/
 
-	//lineBres(10, 10, 20, 20, g_colorBuffer);
-	SRColor red;
-	red.a = 1;
-	red.r = 1;
-	SRColor green;
-	green.a = 1;
-	green.g = 1;
-	SRColor blue;
-	blue.a = 1;
-	blue.b = 1;
-
-	DrawTriangle(100, 200, red, 200, 100, green, 200, 300, blue);
+	RenderContent();
 
 	g_colorBuffer->CopyBufferToSurface(g_backBuffer);
 
