@@ -1,5 +1,5 @@
-#ifndef COLORBUFFER
-#define COLORBUFFER
+#ifndef SRCOLORBUFFER_H
+#define SRCOLORBUFFER_H
 
 #include <d3d9.h>
 

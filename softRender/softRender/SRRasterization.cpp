@@ -77,7 +77,7 @@ inline float GetWeight(int x0, int y0, int x1, int y1, int x, int y)
 	return weight;
 }
 
-void lineBres(int x0, int y0, SRColor color0, int xEnd, int yEnd, SRColor colorEnd)
+void LineBres(int x0, int y0, SRColor color0, int xEnd, int yEnd, SRColor colorEnd)
 {
 	int dx = abs(xEnd - x0), dy = abs(yEnd - y0);
 	int p = 2 * dy - dx;
@@ -162,7 +162,7 @@ void DrawTriangleBelowFlat2(int x1, int y1, SRColor color1, int x2, int y2, SRCo
 		//xeColor.b = color2.b * (1 - weightS) + color3.b;
 		xeColor = SRColor::lerp(color1, color3, weightE);
 
-		lineBres(xs, y, xsColor, xe, y, xeColor);
+		LineBres(xs, y, xsColor, xe, y, xeColor);
 	}
 }
 
@@ -192,7 +192,7 @@ void DrawTriangleTopFlat2(int x1, int y1, SRColor color1, int x2, int y2, SRColo
 		//xeColor.b = color1.b * (1 - weightS) + color3.b;
 		xeColor = SRColor::lerp(color3, color2, weightE);
 
-		lineBres(xs, y, xsColor, xe, y, xeColor);
+		LineBres(xs, y, xsColor, xe, y, xeColor);
 	}
 }
 

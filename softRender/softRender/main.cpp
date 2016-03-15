@@ -8,6 +8,7 @@
 
 #include "SRColorBuffer.h"
 #include "SRRasterization.h"
+#include "SRMatrix.h"
 
 #pragma comment(lib, "dxerr.lib")
 #pragma comment(lib, "d3d9.lib")

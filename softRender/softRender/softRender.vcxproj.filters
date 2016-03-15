@@ -32,5 +32,8 @@
     <ClInclude Include="SRRasterization.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SRMatrix.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

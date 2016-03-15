@@ -72,6 +72,7 @@
     <ClCompile Include="SRRasterization.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="SRMatrix.h" />
     <ClInclude Include="SRColorBuffer.h" />
     <ClInclude Include="SRRasterization.h" />
   </ItemGroup>
