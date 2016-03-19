@@ -55,8 +55,8 @@ HRESULT InitD3D(HWND hWnd)
 	d3dpp.SwapEffect = D3DSWAPEFFECT_COPY;
 	d3dpp.BackBufferCount = 1;
 	d3dpp.BackBufferFormat = D3DFMT_A8R8G8B8;
-	d3dpp.BackBufferWidth = 640;
-	d3dpp.BackBufferHeight = 480;
+	d3dpp.BackBufferWidth = m_width;
+	d3dpp.BackBufferHeight = m_height;
 
 	d3dpp.Flags = D3DPRESENTFLAG_LOCKABLE_BACKBUFFER;
 
@@ -68,7 +68,7 @@ HRESULT InitD3D(HWND hWnd)
 		return E_FAIL;
 	}
 
-	g_colorBuffer = new SRColorBuffer(640, 480);
+	g_colorBuffer = new SRColorBuffer(m_width, m_height);
 
 	// Device state would normally be set here
 	//g_pd3dDevice->CreateOffscreenPlainSurface(300, 300, D3DFMT_A8R8G8B8, D3DPOOL_DEFAULT, &g_offLineBuffer, NULL);
@@ -96,17 +96,17 @@ VOID Cleanup()
 void RenderContent()
 {
 	//lineBres(10, 10, 20, 20, g_colorBuffer);
-	SRColor red;
-	red.a = 1;
-	red.r = 1;
-	SRColor green;
-	green.a = 1;
-	green.g = 1;
-	SRColor blue;
-	blue.a = 1;
-	blue.b = 1;
-
-	DrawTriangle(100, 200, red, 200, 100, green, 200, 300, blue);
+	
+	//SRColor red;
+	//red.a = 1;
+	//red.r = 1;
+	//SRColor green;
+	//green.a = 1;
+	//green.g = 1;
+	//SRColor blue;
+	//blue.a = 1;
+	//blue.b = 1;
+	//DrawTriangle(100, 200, red, 200, 100, green, 200, 300, blue);
 
 	// todo : 设置正方形模型
 
@@ -140,11 +140,11 @@ VOID Render()
 	const TCHAR * message2 = DXGetErrorDescription(ret3);
 	
 	D3DCOLOR * pColorArray = (D3DCOLOR *)pRect.pBits;
-	for (int i = 0; i < 480; ++i)
+	for (int i = 0; i < m_height; ++i)
 	{
-		for (int j = 0; j < 640; ++j)
+		for (int j = 0; j < m_width; ++j)
 		{
-			pColorArray[i * 640 + j] = D3DCOLOR_ARGB(255, 0, 255, 0);
+			pColorArray[i * m_width + j] = D3DCOLOR_ARGB(255, 0, 255, 0);
 		}
 	}
 
@@ -208,7 +208,7 @@ INT WINAPI wWinMain(HINSTANCE hInst, HINSTANCE, LPWSTR, INT)
 
 	// Create the application's window
 	HWND hWnd = CreateWindow(L"softRender", L"softRenderInstance",
-		WS_OVERLAPPED | WS_SYSMENU, 100, 100, 640, 480,
+		WS_OVERLAPPED | WS_SYSMENU, 100, 100, m_width, m_height,
 		NULL, NULL, wc.hInstance, NULL);
 
 	// Initialize Direct3D

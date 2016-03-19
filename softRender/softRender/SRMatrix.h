@@ -12,6 +12,8 @@
 
 void Matrix4x4SetIdentity(Matrix4x4 matIdent4x4);
 
+void Matrix4x4SetZero(Matrix4x4 matIdent4x4);
+
 void TranslatePoint(float tx, float ty, float tz, Matrix4x4 outMatrix);
 
 void PointRotateByZ(float radTheta, Matrix4x4 outMatrix);

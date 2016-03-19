@@ -15,6 +15,11 @@ public:
 	SRVector m_u; // 相机右方向
 	SRVector m_v; // 相机上方向 
 	SRVector m_n; // 相机正方向 n = u X v
+
+	float m_near;
+	float m_far;
+	float m_fovRadTheta;
+	float m_aspect;
 };
 
 #endif

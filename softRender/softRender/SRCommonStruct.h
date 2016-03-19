@@ -59,7 +59,7 @@ struct SRVector
 	}
 };
 
-typedef float Matrix4x4[4][4];
+
 
 struct SRColor
 {
@@ -95,5 +95,12 @@ struct SRVertex
 	float m_tx;
 	float m_ty;
 };
+
+typedef float Matrix4x4[4][4];
+
+const float PI = 3.141592f;
+
+const int m_width = 640;
+const int m_height = 480;
 
 #endif

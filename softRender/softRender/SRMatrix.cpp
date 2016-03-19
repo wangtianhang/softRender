@@ -13,14 +13,26 @@ void Matrix4x4SetIdentity(Matrix4x4 matIdent4x4)
 	}
 }
 
+void Matrix4x4SetZero(Matrix4x4 matIdent4x4)
+{
+	int row, col;
+	for (row = 0; row < 4; row++)
+	{
+		for (col = 0; col < 4; col++)
+		{
+			matIdent4x4[row][col] = 0;
+		}
+	}
+}
+
 void TranslatePoint(float tx, float ty, float tz, Matrix4x4 outMatrix)
 {
 	//Matrix4x4 matTransl3D;
 	Matrix4x4SetIdentity(outMatrix);
 
-	outMatrix[0][3] == tx;
-	outMatrix[1][3] == ty;
-	outMatrix[2][3] == tz;
+	outMatrix[0][3] = tx;
+	outMatrix[1][3] = ty;
+	outMatrix[2][3] = tz;
 
 	//return &matTransl3D;
 }
@@ -33,10 +45,10 @@ void PointRotateByZ(float radTheta, Matrix4x4 outMatrix)
 	float sinTheta = sin(radTheta);
 	float cosTheta = cos(radTheta);
 
-	outMatrix[0][0] == cosTheta;
-	outMatrix[0][1] == -sinTheta;
-	outMatrix[1][0] == sinTheta;
-	outMatrix[1][1] == cosTheta;
+	outMatrix[0][0] = cosTheta;
+	outMatrix[0][1] = -sinTheta;
+	outMatrix[1][0] = sinTheta;
+	outMatrix[1][1] = cosTheta;
 
 	//return &matTransl3D;
 }
@@ -49,10 +61,10 @@ void PointRotateByY(float radTheta, Matrix4x4 outMatrix)
 	float sinTheta = sin(radTheta);
 	float cosTheta = cos(radTheta);
 
-	outMatrix[0][0] == cosTheta;
-	outMatrix[0][2] == sinTheta;
-	outMatrix[2][0] == -sinTheta;
-	outMatrix[2][2] == cosTheta;
+	outMatrix[0][0] = cosTheta;
+	outMatrix[0][2] = sinTheta;
+	outMatrix[2][0] = -sinTheta;
+	outMatrix[2][2] = cosTheta;
 
 	//return &matTransl3D;
 }
@@ -65,10 +77,10 @@ void PointRotateByX(float radTheta, Matrix4x4 outMatrix)
 	float sinTheta = sin(radTheta);
 	float cosTheta = cos(radTheta);
 
-	outMatrix[1][1] == cosTheta;
-	outMatrix[1][2] == -sinTheta;
-	outMatrix[2][1] == sinTheta;
-	outMatrix[2][2] == cosTheta;
+	outMatrix[1][1] = cosTheta;
+	outMatrix[1][2] = -sinTheta;
+	outMatrix[2][1] = sinTheta;
+	outMatrix[2][2] = cosTheta;
 
 	//return &matTransl3D;
 }

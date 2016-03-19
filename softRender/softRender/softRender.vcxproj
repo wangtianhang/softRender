@@ -70,17 +70,21 @@
     <ClCompile Include="SRCamera.cpp" />
     <ClCompile Include="SRColorBuffer.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="SRLight.cpp" />
     <ClCompile Include="SRMatrix.cpp" />
     <ClCompile Include="SRObj.cpp" />
     <ClCompile Include="SRRasterization.cpp" />
+    <ClCompile Include="SRSoftRender.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SRCamera.h" />
     <ClInclude Include="SRCommonStruct.h" />
+    <ClInclude Include="SRLight.h" />
     <ClInclude Include="SRMatrix.h" />
     <ClInclude Include="SRColorBuffer.h" />
     <ClInclude Include="SRObj.h" />
     <ClInclude Include="SRRasterization.h" />
+    <ClInclude Include="SRSoftRender.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

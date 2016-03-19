@@ -1,6 +1,18 @@
+#include <math.h>
+
 #include "SRCamera.h"
 
 #include "SRMatrix.h"
+
+float ConvertRadToDeg(float rad)
+{
+	return rad / PI * 180;
+}
+
+float ConvertDegToRad(float deg)
+{
+	return deg / 180 * PI;
+}
 
 SRCamera::SRCamera(SRPoint pos, SRVector u, SRVector v)
 {
@@ -8,6 +20,12 @@ SRCamera::SRCamera(SRPoint pos, SRVector u, SRVector v)
 	m_u = u.GetNormaliseVector();
 	m_v = v.GetNormaliseVector();
 	m_n = SRVector::GetCrossVector(m_u, m_v);
+
+	m_near = 0.1f;
+	m_far = 100;
+	m_fovRadTheta = ConvertDegToRad(60);
+	//m_fovRadTheta = m_fovRadTheta / ;
+	m_aspect = (float)m_height / m_width;
 }
 
 void SRCamera::GetWorldToViewMatrix(Matrix4x4 outMatrix)
@@ -29,5 +47,15 @@ void SRCamera::GetWorldToViewMatrix(Matrix4x4 outMatrix)
 
 void SRCamera::GetPerspectiveMatrix(Matrix4x4 outMatrix)
 {
+	// 对称棱台特化矩阵
+	Matrix4x4SetZero(outMatrix);
 
+	float halfTheta = m_fovRadTheta / 2;
+	float cotHalfTheta = 1 / tan(halfTheta);
+
+	outMatrix[0][0] = cotHalfTheta / m_aspect;
+	outMatrix[1][1] = cotHalfTheta;
+	outMatrix[2][2] = (m_near + m_far) / (m_near - m_far);
+	outMatrix[2][3] = -(2 * m_near * m_far / (m_near - m_far));
+	outMatrix[3][2] = -1;
 }

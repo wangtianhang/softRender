@@ -1,83 +1,110 @@
 #include "SRRasterization.h"
 
+#include "SRMatrix.h"
+
+#include "SRColorBuffer.h"
+
 extern SRColorBuffer * g_colorBuffer;
 
 inline float GetWeight(int x0, int y0, int x1, int y1, int x, int y)
 {
-// 	int dx = abs(x1 - x0);
-// 	int dy = abs(y1 - y0);
-// 	if (dx == 0 && dy == 0)
-// 	{
-// 		return 1;
-// 	}
-// 
-// 	if (dx > dy)
-// 	{
-// 		int xMin;
-// 		int xMax;
-// 		if (x0 < x1)
-// 		{
-// 			xMin = x0;
-// 			xMax = x1;
-// 		}
-// 		else
-// 		{
-// 			xMin = x1;
-// 			xMax = x0;
-// 		}
-// 
-// 		if (x < xMin)
-// 		{
-// 			return 0;
-// 		}
-// 		if (x > xMax)
-// 		{
-// 			return 1;
-// 		}
-// 		float weight = (float)(x - xMin) / dx;
-// 		return weight;
-// 	}
-// 	else
-// 	{
-// 		int yMin;
-// 		int yMax;
-// 		if (y0 < y1)
-// 		{
-// 			yMin = y0;
-// 			yMax = y1;
-// 		}
-// 		else
-// 		{
-// 			yMin = y1;
-// 			yMax = y0;
-// 		}
-// 
-// 		if (y < yMin)
-// 		{
-// 			return 0;
-// 		}
-// 		if (y > yMax)
-// 		{
-// 			return 1;
-// 		}
-// 		float weight = (float)(y - yMin) / dy;
-// 		return weight;
-// 	}
+	// 	int dx = abs(x1 - x0);
+	// 	int dy = abs(y1 - y0);
+	// 	if (dx == 0 && dy == 0)
+	// 	{
+	// 		return 1;
+	// 	}
+	// 
+	// 	if (dx > dy)
+	// 	{
+	// 		int xMin;
+	// 		int xMax;
+	// 		if (x0 < x1)
+	// 		{
+	// 			xMin = x0;
+	// 			xMax = x1;
+	// 		}
+	// 		else
+	// 		{
+	// 			xMin = x1;
+	// 			xMax = x0;
+	// 		}
+	// 
+	// 		if (x < xMin)
+	// 		{
+	// 			return 0;
+	// 		}
+	// 		if (x > xMax)
+	// 		{
+	// 			return 1;
+	// 		}
+	// 		float weight = (float)(x - xMin) / dx;
+	// 		return weight;
+	// 	}
+	// 	else
+	// 	{
+	// 		int yMin;
+	// 		int yMax;
+	// 		if (y0 < y1)
+	// 		{
+	// 			yMin = y0;
+	// 			yMax = y1;
+	// 		}
+	// 		else
+	// 		{
+	// 			yMin = y1;
+	// 			yMax = y0;
+	// 		}
+	// 
+	// 		if (y < yMin)
+	// 		{
+	// 			return 0;
+	// 		}
+	// 		if (y > yMax)
+	// 		{
+	// 			return 1;
+	// 		}
+	// 		float weight = (float)(y - yMin) / dy;
+	// 		return weight;
+	// 	}
 	if (x1 == x0 && y1 == y0)
 	{
 		return 1;
 	}
-	float totalDistance = sqrtf((x1 - x0) * (x1 - x0) + (y1- y0) * (y1 - y0));
+	float totalDistance = sqrtf((x1 - x0) * (x1 - x0) + (y1 - y0) * (y1 - y0));
 	float partDistance = sqrtf((x - x0) * (x - x0) + (y - y0) * (y - y0));
 	float weight = partDistance / totalDistance;
-	if(weight > 1)
+	if (weight > 1)
 	{
 		weight = 1;
 	}
 	return weight;
 }
 
-void LineBres(int x0, int y0, SRColor color0, int xEnd, int yEnd, SRColor colorEnd)
+// void LineBres(int x0, int y0, SRColor color0, int xEnd, int yEnd, SRColor colorEnd)
+// {
+// 
+// }
+
+// 画实心平底三角形, x1为顶 x2在左，x3在右
+// void DrawTriangleBelowFlat2(int x1, int y1, SRColor color1, int x2, int y2, SRColor color2, int x3, int y3, SRColor color3)
+// {
+// 	
+// }
+
+// 画实心平顶三角形, y3为底 y1在左, y2在右
+// void DrawTriangleTopFlat2(int x1, int y1, SRColor color1, int x2, int y2, SRColor color2, int x3, int y3, SRColor color3)
+// {
+// 
+// }
+
+// 画任意实心三角形
+// void DrawTriangle(int x1, int y1, SRColor color1, int x2, int y2, SRColor color2, int x3, int y3, SRColor color3)
+// {
+// 
+// }
+
+void SRRasterization::LineBres(int x0, int y0, SRColor color0, int xEnd, int yEnd, SRColor colorEnd)
 {
 	int dx = abs(xEnd - x0), dy = abs(yEnd - y0);
 	int p = 2 * dy - dx;
@@ -136,8 +163,7 @@ void LineBres(int x0, int y0, SRColor color0, int xEnd, int yEnd, SRColor colorE
 	}
 }
 
-// 画实心平底三角形, x1为顶 x2在左，x3在右
-void DrawTriangleBelowFlat2(int x1, int y1, SRColor color1, int x2, int y2, SRColor color2, int x3, int y3, SRColor color3)
+void SRRasterization::DrawTriangleBelowFlat2(int x1, int y1, SRColor color1, int x2, int y2, SRColor color2, int x3, int y3, SRColor color3)
 {
 	for (int y = y1; y <= y2; ++y)
 	{
@@ -155,7 +181,7 @@ void DrawTriangleBelowFlat2(int x1, int y1, SRColor color1, int x2, int y2, SRCo
 
 		SRColor xeColor;
 		float weightE = GetWeight(x1, y1, x3, y3, xe, y);
-		
+
 		//xeColor.a = color2.a * (1 - weightS) + color3.a;
 		//xeColor.r = color2.r * (1 - weightS) + color3.r;
 		//xeColor.g = color2.g * (1 - weightS) + color3.g;
@@ -166,8 +192,7 @@ void DrawTriangleBelowFlat2(int x1, int y1, SRColor color1, int x2, int y2, SRCo
 	}
 }
 
-// 画实心平顶三角形, y3为底 y1在左, y2在右
-void DrawTriangleTopFlat2(int x1, int y1, SRColor color1, int x2, int y2, SRColor color2, int x3, int y3, SRColor color3)
+void SRRasterization::DrawTriangleTopFlat2(int x1, int y1, SRColor color1, int x2, int y2, SRColor color2, int x3, int y3, SRColor color3)
 {
 	for (int y = y1; y <= y3; ++y)
 	{
@@ -196,8 +221,7 @@ void DrawTriangleTopFlat2(int x1, int y1, SRColor color1, int x2, int y2, SRColo
 	}
 }
 
-// 画任意实心三角形
-void DrawTriangle(int x1, int y1, SRColor color1, int x2, int y2, SRColor color2, int x3, int y3, SRColor color3)
+void SRRasterization::DrawTriangle(int x1, int y1, SRColor color1, int x2, int y2, SRColor color2, int x3, int y3, SRColor color3)
 {
 	if (y1 == y2)
 	{
@@ -315,7 +339,7 @@ void DrawTriangle(int x1, int y1, SRColor color1, int x2, int y2, SRColor color2
 		if (xlongSide <= xmiddle) // 左三角形  
 		{
 			float weight = GetWeight(xbottom, ybottom, xtop, ytop, xlongSide, ymiddle);
-				
+
 			longSideMiddleColor = SRColor::Lerp(bottomColor, topColor, weight);
 			// 画平底  
 			DrawTriangleBelowFlat2(xtop, ytop, topColor, xlongSide, ymiddle, longSideMiddleColor, xmiddle, ymiddle, middleColr);
@@ -336,4 +360,14 @@ void DrawTriangle(int x1, int y1, SRColor color1, int x2, int y2, SRColor color2
 			DrawTriangleTopFlat2(xmiddle, ymiddle, middleColr, xlongSide, ymiddle, longSideMiddleColor, xbottom, ybottom, bottomColor);
 		}
 	}
+}
+
+void SRRasterization::GetViewPortMatrix(Matrix4x4 outMatrix)
+{
+	Matrix4x4SetZero(outMatrix);
+
+	outMatrix[0][0] = m_width / 2; outMatrix[0][3] = m_width / 2;
+	outMatrix[1][1] = m_height / 2; outMatrix[1][3] = m_height / 2;
+	outMatrix[2][2] = 0.5f; outMatrix[2][3] = 0.5f;
+	outMatrix[3][3] = 1;
 }
