@@ -104,7 +104,7 @@ void LineBres(int x0, int y0, SRColor color0, int xEnd, int yEnd, SRColor colorE
 	//float r = color0.r * (1 - weight) + colorEnd.r;
 	//float g = color0.g * (1 - weight) + colorEnd.g;
 	//float b = color0.b * (1 - weight) + colorEnd.b;
-	SRColor srColor = SRColor::lerp(color0, colorEnd, weight);
+	SRColor srColor = SRColor::Lerp(color0, colorEnd, weight);
 	D3DCOLOR color = D3DCOLOR_ARGB((int)(255 * srColor.a), (int)(255 * srColor.r), (int)(255 * srColor.g), (int)(255 * srColor.b));
 
 	g_colorBuffer->SetPixel(x, y, color);
@@ -129,7 +129,7 @@ void LineBres(int x0, int y0, SRColor color0, int xEnd, int yEnd, SRColor colorE
 		//float r = color0.r * (1 - weight) + colorEnd.r;
 		//float g = color0.g * (1 - weight) + colorEnd.g;
 		//float b = color0.b * (1 - weight) + colorEnd.b;
-		SRColor srColor = SRColor::lerp(color0, colorEnd, weight);
+		SRColor srColor = SRColor::Lerp(color0, colorEnd, weight);
 		D3DCOLOR color = D3DCOLOR_ARGB((int)(255 * srColor.a), (int)(255 * srColor.r), (int)(255 * srColor.g), (int)(255 * srColor.b));
 
 		g_colorBuffer->SetPixel(x, y, color);
@@ -151,7 +151,7 @@ void DrawTriangleBelowFlat2(int x1, int y1, SRColor color1, int x2, int y2, SRCo
 		//xsColor.r = color1.r * (1 - weightS) + color2.r;
 		//xsColor.g = color1.g * (1 - weightS) + color2.g;
 		//xsColor.b = color1.b * (1 - weightS) + color2.b;
-		xsColor = SRColor::lerp(color2, color1, weightS);
+		xsColor = SRColor::Lerp(color2, color1, weightS);
 
 		SRColor xeColor;
 		float weightE = GetWeight(x1, y1, x3, y3, xe, y);
@@ -160,7 +160,7 @@ void DrawTriangleBelowFlat2(int x1, int y1, SRColor color1, int x2, int y2, SRCo
 		//xeColor.r = color2.r * (1 - weightS) + color3.r;
 		//xeColor.g = color2.g * (1 - weightS) + color3.g;
 		//xeColor.b = color2.b * (1 - weightS) + color3.b;
-		xeColor = SRColor::lerp(color1, color3, weightE);
+		xeColor = SRColor::Lerp(color1, color3, weightE);
 
 		LineBres(xs, y, xsColor, xe, y, xeColor);
 	}
@@ -181,7 +181,7 @@ void DrawTriangleTopFlat2(int x1, int y1, SRColor color1, int x2, int y2, SRColo
 		//xsColor.r = color2.r * (1 - weightS) + color1.r;
 		//xsColor.g = color2.g * (1 - weightS) + color1.g;
 		//xsColor.b = color2.b * (1 - weightS) + color1.b;
-		xsColor = SRColor::lerp(color1, color3, weightS);
+		xsColor = SRColor::Lerp(color1, color3, weightS);
 
 		SRColor xeColor;
 		float weightE = GetWeight(x3, y3, x2, y2, xe, y);
@@ -190,7 +190,7 @@ void DrawTriangleTopFlat2(int x1, int y1, SRColor color1, int x2, int y2, SRColo
 		//xeColor.r = color1.r * (1 - weightS) + color3.r;
 		//xeColor.g = color1.g * (1 - weightS) + color3.g;
 		//xeColor.b = color1.b * (1 - weightS) + color3.b;
-		xeColor = SRColor::lerp(color3, color2, weightE);
+		xeColor = SRColor::Lerp(color3, color2, weightE);
 
 		LineBres(xs, y, xsColor, xe, y, xeColor);
 	}
@@ -316,7 +316,7 @@ void DrawTriangle(int x1, int y1, SRColor color1, int x2, int y2, SRColor color2
 		{
 			float weight = GetWeight(xbottom, ybottom, xtop, ytop, xlongSide, ymiddle);
 				
-			longSideMiddleColor = SRColor::lerp(bottomColor, topColor, weight);
+			longSideMiddleColor = SRColor::Lerp(bottomColor, topColor, weight);
 			// »­Æ½µ×  
 			DrawTriangleBelowFlat2(xtop, ytop, topColor, xlongSide, ymiddle, longSideMiddleColor, xmiddle, ymiddle, middleColr);
 
@@ -327,7 +327,7 @@ void DrawTriangle(int x1, int y1, SRColor color1, int x2, int y2, SRColor color2
 		{
 			float weight = GetWeight(xbottom, ybottom, xtop, ytop, xlongSide, ymiddle);
 
-			longSideMiddleColor = SRColor::lerp(bottomColor, topColor, weight);
+			longSideMiddleColor = SRColor::Lerp(bottomColor, topColor, weight);
 
 			// »­Æ½µ×  
 			DrawTriangleBelowFlat2(xtop, ytop, topColor, xmiddle, ymiddle, middleColr, xlongSide, ymiddle, longSideMiddleColor);

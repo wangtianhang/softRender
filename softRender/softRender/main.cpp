@@ -107,6 +107,16 @@ void RenderContent()
 	blue.b = 1;
 
 	DrawTriangle(100, 200, red, 200, 100, green, 200, 300, blue);
+
+	// todo : 设置正方形模型
+
+	// todo : 转换到投影坐标系
+
+	// todo : 裁剪
+
+	// todo : 视口变换
+	
+	// todo : 光栅化
 }
 
 
