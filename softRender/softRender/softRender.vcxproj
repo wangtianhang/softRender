@@ -73,6 +73,7 @@
     <ClCompile Include="SRLight.cpp" />
     <ClCompile Include="SRMatrix.cpp" />
     <ClCompile Include="SRObj.cpp" />
+    <ClCompile Include="SRProfiler.cpp" />
     <ClCompile Include="SRRasterization.cpp" />
     <ClCompile Include="SRSoftRender.cpp" />
   </ItemGroup>
@@ -83,6 +84,7 @@
     <ClInclude Include="SRMatrix.h" />
     <ClInclude Include="SRColorBuffer.h" />
     <ClInclude Include="SRObj.h" />
+    <ClInclude Include="SRProfiler.h" />
     <ClInclude Include="SRRasterization.h" />
     <ClInclude Include="SRSoftRender.h" />
   </ItemGroup>

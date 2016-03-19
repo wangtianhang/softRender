@@ -111,12 +111,13 @@ void RenderContent()
 	// todo : 设置正方形模型
 
 	// todo : 转换到投影坐标系
-
+	// todo : 绕序检测
 	// todo : 裁剪
 
 	// todo : 视口变换
 	
 	// todo : 光栅化
+	// todo : 深度检测
 }
 
 

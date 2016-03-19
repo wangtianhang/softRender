@@ -104,6 +104,22 @@ inline float GetWeight(int x0, int y0, int x1, int y1, int x, int y)
 // 
 // }
 
+inline bool IsInScreen(int x, int y)
+{
+	if (x > 0 
+		&& x < m_width
+		&& y > 0
+		&& y < m_height)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+
 void SRRasterization::LineBres(int x0, int y0, SRColor color0, int xEnd, int yEnd, SRColor colorEnd)
 {
 	int dx = abs(xEnd - x0), dy = abs(yEnd - y0);
@@ -161,6 +177,11 @@ void SRRasterization::LineBres(int x0, int y0, SRColor color0, int xEnd, int yEn
 
 		g_colorBuffer->SetPixel(x, y, color);
 	}
+}
+
+void SRRasterization::PixelStage(int x0, int y0, SRVertex vertex0, int x1, int y1, SRVertex vertex1, int x, int y)
+{
+
 }
 
 void SRRasterization::DrawTriangleBelowFlat2(int x1, int y1, SRColor color1, int x2, int y2, SRColor color2, int x3, int y3, SRColor color3)
@@ -371,3 +392,4 @@ void SRRasterization::GetViewPortMatrix(Matrix4x4 outMatrix)
 	outMatrix[2][2] = 0.5f; outMatrix[2][3] = 0.5f;
 	outMatrix[3][3] = 1;
 }
+

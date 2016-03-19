@@ -22,6 +22,9 @@ public:
 	void DrawTriangle(int x1, int y1, SRColor color1, int x2, int y2, SRColor color2, int x3, int y3, SRColor color3);
 
 	void GetViewPortMatrix(Matrix4x4 outMatrix);
+
+	//bool IsInScreen(int x, int y);
+	void PixelStage(int x0, int y0, SRVertex vertex0, int x1, int y1, SRVertex vertex1, int x, int y);
 };
 
 #endif

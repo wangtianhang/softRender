@@ -39,6 +39,9 @@
     <ClCompile Include="SRLight.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SRProfiler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SRColorBuffer.h">
@@ -63,6 +66,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SRLight.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SRProfiler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

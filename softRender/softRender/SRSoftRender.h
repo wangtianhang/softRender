@@ -12,6 +12,10 @@ class SRLight;
 class SRSoftRender
 {
 public:
+	void Render();
+
+	void VertexStage();
+	
 	std::vector<SRObj *> m_objList;
 	std::vector<SRLight *> m_lightList;
 
