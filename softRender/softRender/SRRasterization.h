@@ -25,6 +25,11 @@ public:
 
 	//bool IsInScreen(int x, int y);
 	void FragmentStage(int x0, int y0, SRVertex vertex0, int x1, int y1, SRVertex vertex1, int x, int y);
+
+	inline bool IsInScreen(int x, int y);
+
+	int m_width;
+	int m_height;
 };
 
 #endif

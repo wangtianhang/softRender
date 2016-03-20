@@ -104,20 +104,10 @@ inline float GetWeight(int x0, int y0, int x1, int y1, int x, int y)
 // 
 // }
 
-inline bool IsInScreen(int x, int y)
-{
-	if (x > 0 
-		&& x < m_width
-		&& y > 0
-		&& y < m_height)
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
-}
+// inline bool IsInScreen(int x, int y)
+// {
+// 
+// }
 
 
 void SRRasterization::LineBres(int x0, int y0, SRVertex vertex0, int xEnd, int yEnd, SRVertex vertex1)
@@ -386,5 +376,20 @@ void SRRasterization::GetViewPortMatrix(Matrix4x4 outMatrix)
 	outMatrix[1][1] = m_height / 2; outMatrix[1][3] = m_height / 2;
 	outMatrix[2][2] = 0.5f; outMatrix[2][3] = 0.5f;
 	outMatrix[3][3] = 1;
+}
+
+bool SRRasterization::IsInScreen(int x, int y)
+{
+	if (x > 0
+		&& x < m_width
+		&& y > 0
+		&& y < m_height)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
 
