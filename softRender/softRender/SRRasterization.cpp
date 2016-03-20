@@ -55,6 +55,13 @@ void SRRasterization::DrawTriangle(SRVertex vertex1, SRVertex vertex2, SRVertex 
 	int x3 = round(vertex3.m_pos.x);
 	int y3 = round(vertex3.m_pos.y);
 
+	if ((x1 == x2 && y1 == y2)
+		|| (x1 == x3 && y1 == y3)
+		|| (x2 == x3 && y2 == y3))
+	{
+		return;
+	}
+
 	if (y1 == y2)
 	{
 		if (y3 <= y1) // 平底  
@@ -227,6 +234,7 @@ void SRRasterization::CopyToScreen()
 
 void SRRasterization::DrawTriangleBelowFlat2(int x1, int y1, SRVertex vertex1, int x2, int y2, SRVertex vertex2, int x3, int y3, SRVertex vertex3)
 {
+	// 画实心平底三角形, x1为顶 x2在左，x3在右
 	for (int y = y1; y <= y2; ++y)
 	{
 		int xs, xe;
@@ -247,6 +255,7 @@ void SRRasterization::DrawTriangleBelowFlat2(int x1, int y1, SRVertex vertex1, i
 
 void SRRasterization::DrawTriangleTopFlat2(int x1, int y1, SRVertex vertex1, int x2, int y2, SRVertex vertex2, int x3, int y3, SRVertex vertex3)
 {
+	// 画实心平顶三角形, y3为底 y1在左, y2在右
 	for (int y = y1; y <= y3; ++y)
 	{
 		int xs, xe;
