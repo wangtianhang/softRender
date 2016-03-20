@@ -12,6 +12,15 @@ struct SRPoint
 		z = 0;
 		w = 1;
 	}
+
+	SRPoint(float x, float y, float z)
+	{
+		this->x = x;
+		this->y = y;
+		this->z = z;
+		w = 1;
+	}
+
 	float x;
 	float y;
 	float z;
@@ -27,6 +36,15 @@ struct SRVector
 		z = 0;
 		w = 0;
 	}
+
+	SRVector(float x, float y, float z)
+	{
+		this->x = x;
+		this->y = y;
+		this->z = z;
+		w = 0;
+	}
+
 	float x;
 	float y;
 	float z;
@@ -103,6 +121,13 @@ struct SRVertex
 		
 		return ret;
 	}
+};
+
+struct  SRFragment
+{
+	SRColor m_color;
+	float m_tx;
+	float m_ty;
 };
 
 typedef float Matrix4x4[4][4];

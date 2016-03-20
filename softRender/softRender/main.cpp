@@ -89,7 +89,7 @@ LRESULT WINAPI MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	switch (msg)
 	{
 	case WM_DESTROY:
-		g_softRender->Cleanup();
+		g_softRender->CleanUp();
 		PostQuitMessage(0);
 		return 0;
 	}

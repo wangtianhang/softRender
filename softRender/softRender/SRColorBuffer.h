@@ -10,7 +10,7 @@ class SRColorBuffer
 
 public:
 	SRColorBuffer(int width, int height);
-	void SetPixel(int x, int y, D3DCOLOR color);
+	void SetPixel(int x, int y, SRColor srColor);
 	void CopyBufferToSurface(LPDIRECT3DSURFACE9 pSurface);
 private:
 	int m_width = 0;

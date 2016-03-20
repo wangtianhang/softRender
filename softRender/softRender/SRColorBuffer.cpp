@@ -13,9 +13,10 @@ SRColorBuffer::SRColorBuffer(int width, int height)
 	m_pBuffer = new D3DCOLOR[width * height]();
 }
 
-void SRColorBuffer::SetPixel(int x, int y, D3DCOLOR color)
+void SRColorBuffer::SetPixel(int x, int y, SRColor srColor)
 {
 	//int convertY = m_height - y - 1;
+	D3DCOLOR color = D3DCOLOR_ARGB((int)(255 * srColor.a), (int)(255 * srColor.r), (int)(255 * srColor.g), (int)(255 * srColor.b));
 	m_pBuffer[y * m_width + x] = color;
 }
 

@@ -24,7 +24,7 @@ public:
 	void GetViewPortMatrix(Matrix4x4 outMatrix);
 
 	//bool IsInScreen(int x, int y);
-	void FragmentStage(int x0, int y0, SRVertex vertex0, int x1, int y1, SRVertex vertex1, int x, int y);
+	SRColor FragmentStage(SRFragment srFragment);
 
 	inline bool IsInScreen(int x, int y);
 

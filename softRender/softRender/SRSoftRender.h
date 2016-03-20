@@ -6,6 +6,8 @@
 
 #include <vector>
 
+#include "SRCommonStruct.h"
+
 class SRObj;
 class SRCamera;
 class SRLight;
@@ -17,11 +19,14 @@ public:
 
 	void Render();
 
-	void VertexStage();
+	void CopyToScreen();
 
-	void Cleanup();
+	SRVertex VertexStage(Matrix4x4 modelToViewMatrix, SRVertex inVertex);
+
+	void CleanUp();
 	
-	std::vector<SRObj *> m_objList;
+	//std::vector<SRObj *> m_objList;
+	SRObj * m_testCube;
 	std::vector<SRLight *> m_lightList;
 
 	SRCamera * m_camera;

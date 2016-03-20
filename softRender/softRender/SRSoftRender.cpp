@@ -8,6 +8,12 @@
 
 #include "SRColorBuffer.h"
 
+#include "SRObj.h"
+
+#include "SRMatrix.h"
+
+#include "SRCamera.h"
+
 //-----------------------------------------------------------------------------
 // Global variables
 //-----------------------------------------------------------------------------
@@ -47,24 +53,34 @@ HRESULT SRSoftRender::Init(HWND hWnd, int width, int height)
 
 	g_colorBuffer = new SRColorBuffer(width, height);
 
+	m_testCube = new SRObj();
+	m_testCube->InitToCube();
+
+	SRPoint cameraPos = SRPoint(0, 0, 10);
+	SRVector cameraRight = SRVector(1, 0, 0);
+	SRVector cameraUp = SRVector(0, 1, 0);
+	m_camera = new SRCamera(cameraPos, cameraRight, cameraUp, width, height);
+
 	return S_OK;
 }
 
 void SRSoftRender::Render()
 {
-	// Clear the backbuffer to a blue color
-	g_pd3dDevice->BeginScene();
+	Matrix4x4 modelToWorldMatrix;
+	TranslatePoint(m_testCube->m_pos.x, m_testCube->m_pos.y, m_testCube->m_pos.z, modelToWorldMatrix);
+	Matrix4x4 worldToViewMatrix;
+	m_camera->GetWorldToViewMatrix(worldToViewMatrix);
 
-	HRESULT ret = g_pd3dDevice->GetBackBuffer(0, 0, D3DBACKBUFFER_TYPE_MONO, &g_backBuffer);
+	Matrix4x4 modelToViewMatrix;
+	MatrixMultiMatrix(worldToViewMatrix, modelToWorldMatrix, modelToWorldMatrix);
 
-	D3DSURFACE_DESC surfacedesc;
-	HRESULT ret2 = g_backBuffer->GetDesc(&surfacedesc);
-	const TCHAR * message1 = DXGetErrorString(ret2);
-	const TCHAR * message2 = DXGetErrorDescription(ret2);
-
-	// todo : 设置正方形模型
-
-	// todo : 转换到投影坐标系
+	std::vector<SRVertex> viewSpaceVertexVec;
+	for (int i = 0; i < m_testCube->m_vertexVec.size(); ++i)
+	{
+		SRVertex ret = VertexStage(modelToWorldMatrix, m_testCube->m_vertexVec[i]);
+		viewSpaceVertexVec.push_back(ret);
+	}
+	// todo : 透视投影
 	// todo : 光照
 
 	// todo : 绕序检测
@@ -77,6 +93,20 @@ void SRSoftRender::Render()
 	// todo : 光栅化
 	// todo : 纹理映射
 
+	CopyToScreen();
+}
+
+void SRSoftRender::CopyToScreen()
+{
+	g_pd3dDevice->BeginScene();
+
+	HRESULT ret = g_pd3dDevice->GetBackBuffer(0, 0, D3DBACKBUFFER_TYPE_MONO, &g_backBuffer);
+
+	D3DSURFACE_DESC surfacedesc;
+	HRESULT ret2 = g_backBuffer->GetDesc(&surfacedesc);
+	const TCHAR * message1 = DXGetErrorString(ret2);
+	const TCHAR * message2 = DXGetErrorDescription(ret2);
+
 	g_colorBuffer->CopyBufferToSurface(g_backBuffer);
 
 	g_pd3dDevice->EndScene();
@@ -85,16 +115,21 @@ void SRSoftRender::Render()
 	g_pd3dDevice->Present(NULL, NULL, NULL, NULL);
 }
 
-void SRSoftRender::VertexStage()
-{
 
+SRVertex SRSoftRender::VertexStage(Matrix4x4 modelToViewMatrix, SRVertex inVertex)
+{
+	SRVertex ret;
+
+	ret.m_point = MatrixMultiPoint(modelToViewMatrix, inVertex.m_point);
+
+	return ret;
 }
 
 //-----------------------------------------------------------------------------
 // Name: Cleanup()
 // Desc: Releases all previously initialized objects
 //-----------------------------------------------------------------------------
-void SRSoftRender::Cleanup()
+void SRSoftRender::CleanUp()
 {
 	//if (g_pVB != NULL)
 	//	g_pVB->Release();

@@ -132,7 +132,16 @@ void SRRasterization::LineBres(int x0, int y0, SRVertex vertex0, int xEnd, int y
 
 	//float pointDistance = sqrtf((x - x0) * (x - x0) + (y - y0) * (y - y0));
 	//float weight = pointDistance / lineDistance;
-	FragmentStage(x0, y0, vertex0, xEnd, yEnd, vertex1, x, y);
+	// todo : 做好裁剪后应该不用判定这一步
+	if (IsInScreen(x, y))
+	{
+		float weight = GetWeight(x0, y0, xEnd, yEnd, x, y);
+		SRColor srColor = SRColor::Lerp(vertex0.m_color, vertex1.m_color, weight);
+		SRFragment srFragment;
+		srFragment.m_color = srColor;
+		SRColor color = FragmentStage(srFragment);
+		g_colorBuffer->SetPixel(x, y, color);
+	}
 
 	while (x < xEnd)
 	{
@@ -147,26 +156,22 @@ void SRRasterization::LineBres(int x0, int y0, SRVertex vertex0, int xEnd, int y
 			p += twoDyMinusDx;
 		}
 
-		FragmentStage(x0, y0, vertex0, xEnd, yEnd, vertex1, x, y);
+		// todo : 做好裁剪后应该不用判定这一步
+		if (IsInScreen(x, y))
+		{
+			float weight = GetWeight(x0, y0, xEnd, yEnd, x, y);
+			SRColor srColor = SRColor::Lerp(vertex0.m_color, vertex1.m_color, weight);
+			SRFragment srFragment;
+			srFragment.m_color = srColor;
+			SRColor color = FragmentStage(srFragment);
+			g_colorBuffer->SetPixel(x, y, color);
+		}
 	}
 }
 
-void SRRasterization::FragmentStage(int x0, int y0, SRVertex vertex0, int xEnd, int yEnd, SRVertex vertex1, int x, int y)
+SRColor SRRasterization::FragmentStage(SRFragment srFragment)
 {
-	// todo : 做好裁剪后应该不用判定这一步
-	if (!IsInScreen(x, y))
-	{
-		return;
-	}
-	float weight = GetWeight(x0, y0, xEnd, yEnd, x, y);
-	//float a = color0.a * (1 - weight) + colorEnd.a;
-	//float r = color0.r * (1 - weight) + colorEnd.r;
-	//float g = color0.g * (1 - weight) + colorEnd.g;
-	//float b = color0.b * (1 - weight) + colorEnd.b;
-	SRColor srColor = SRColor::Lerp(vertex0.m_color, vertex1.m_color, weight);
-	D3DCOLOR color = D3DCOLOR_ARGB((int)(255 * srColor.a), (int)(255 * srColor.r), (int)(255 * srColor.g), (int)(255 * srColor.b));
-
-	g_colorBuffer->SetPixel(x, y, color);
+	return srFragment.m_color;
 }
 
 void SRRasterization::DrawTriangleBelowFlat2(int x1, int y1, SRVertex vertex1, int x2, int y2, SRVertex vertex2, int x3, int y3, SRVertex vertex3)
