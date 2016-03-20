@@ -18,7 +18,7 @@ public:
 	// 画任意实心三角形
 	void DrawTriangle(SRVertex vertex1, SRVertex vertex2, SRVertex vertex3);
 
-	void GetViewPortMatrix(Matrix4x4 outMatrix);
+	void GetViewPortMatrix(Matrix4x4 & outMatrix);
 
 	void CopyToScreen();
 

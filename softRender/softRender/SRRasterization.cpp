@@ -194,14 +194,14 @@ void SRRasterization::DrawTriangle(SRVertex vertex1, SRVertex vertex2, SRVertex 
 	}
 }
 
-void SRRasterization::GetViewPortMatrix(Matrix4x4 outMatrix)
+void SRRasterization::GetViewPortMatrix(Matrix4x4 & outMatrix)
 {
-	Matrix4x4SetZero(outMatrix);
+	//Matrix4x4SetZero(outMatrix);
 
-	outMatrix[0][0] = m_width / 2; outMatrix[0][3] = m_width / 2;
-	outMatrix[1][1] = m_height / 2; outMatrix[1][3] = m_height / 2;
-	outMatrix[2][2] = 0.5f; outMatrix[2][3] = 0.5f;
-	outMatrix[3][3] = 1;
+	outMatrix.m00 = m_width / 2; outMatrix.m03 = m_width / 2;
+	outMatrix.m11 = m_height / 2; outMatrix.m13 = m_height / 2;
+	outMatrix.m22 = 0.5f; outMatrix.m23 = 0.5f;
+	outMatrix.m33 = 1;
 }
 
 void SRRasterization::CopyToScreen()

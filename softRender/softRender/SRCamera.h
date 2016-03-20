@@ -8,8 +8,8 @@ class SRCamera
 public:
 	SRCamera(SRPoint pos, SRVector u, SRVector v, int width, int height);
 
-	void GetWorldToViewMatrix(Matrix4x4 outMatrix);
-	void GetPerspectiveMatrix(Matrix4x4 outMatrix);
+	void GetWorldToViewMatrix(Matrix4x4 & outMatrix);
+	void GetPerspectiveMatrix(Matrix4x4 & outMatrix);
 
 	SRPoint m_pos;
 	SRVector m_u; // 相机右方向
