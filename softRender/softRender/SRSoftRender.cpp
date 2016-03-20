@@ -14,6 +14,8 @@
 
 #include "SRCamera.h"
 
+#include "SRRasterization.h"
+
 //-----------------------------------------------------------------------------
 // Global variables
 //-----------------------------------------------------------------------------
@@ -21,9 +23,9 @@ LPDIRECT3D9             g_pD3D = NULL; // Used to create the D3DDevice
 LPDIRECT3DDEVICE9       g_pd3dDevice = NULL; // Our rendering device
 //LPDIRECT3DVERTEXBUFFER9 g_pVB = NULL; // Buffer to hold Vertices
 //LPDIRECT3DSURFACE9  g_offLineBuffer = NULL;
-LPDIRECT3DSURFACE9  g_backBuffer = NULL;
 
-SRColorBuffer * g_colorBuffer = NULL;
+//LPDIRECT3DSURFACE9  g_backBuffer = NULL;
+//SRColorBuffer * g_colorBuffer = NULL;
 
 HRESULT SRSoftRender::Init(HWND hWnd, int width, int height)
 {
@@ -51,76 +53,89 @@ HRESULT SRSoftRender::Init(HWND hWnd, int width, int height)
 		return E_FAIL;
 	}
 
-	g_colorBuffer = new SRColorBuffer(width, height);
+	m_rasterizationMgr = new SRRasterization(width, height);
 
-	m_testCube = new SRObj();
-	m_testCube->InitToCube();
-
-	SRPoint cameraPos = SRPoint(0, 0, 10);
-	SRVector cameraRight = SRVector(1, 0, 0);
-	SRVector cameraUp = SRVector(0, 1, 0);
-	m_camera = new SRCamera(cameraPos, cameraRight, cameraUp, width, height);
+	m_width = width;
+	m_height = height;
 
 	return S_OK;
 }
 
+void SRSoftRender::InitTestModel()
+{
+	SRObj * testCube = new SRObj();
+	testCube->InitToCube();
+	m_objList.push_back(testCube);
+}
+
+void SRSoftRender::InitTestCamera()
+{
+	SRPoint cameraPos = SRPoint(0, 0, 10);
+	SRVector cameraRight = SRVector(1, 0, 0);
+	SRVector cameraUp = SRVector(0, 1, 0);
+	m_camera = new SRCamera(cameraPos, cameraRight, cameraUp, m_width, m_height);
+}
+
 void SRSoftRender::Render()
 {
-	Matrix4x4 modelToWorldMatrix;
-	TranslatePoint(m_testCube->m_pos.x, m_testCube->m_pos.y, m_testCube->m_pos.z, modelToWorldMatrix);
-	Matrix4x4 worldToViewMatrix;
-	m_camera->GetWorldToViewMatrix(worldToViewMatrix);
-
-	Matrix4x4 modelToViewMatrix;
-	MatrixMultiMatrix(worldToViewMatrix, modelToWorldMatrix, modelToWorldMatrix);
-
-	std::vector<SRVertex> viewSpaceVertexVec;
-	for (int i = 0; i < m_testCube->m_vertexVec.size(); ++i)
+	for (std::vector<SRObj *>::iterator iter = m_objList.begin(); iter != m_objList.end(); ++iter)
 	{
-		SRVertex ret = VertexStage(modelToWorldMatrix, m_testCube->m_vertexVec[i]);
-		viewSpaceVertexVec.push_back(ret);
+		Matrix4x4 modelToWorldMatrix;
+		TranslatePoint((*iter)->m_pos.x, (*iter)->m_pos.y, (*iter)->m_pos.z, modelToWorldMatrix);
+		Matrix4x4 worldToViewMatrix;
+		m_camera->GetWorldToViewMatrix(worldToViewMatrix);
+
+		Matrix4x4 modelToViewMatrix;
+		MatrixMultiMatrix(worldToViewMatrix, modelToWorldMatrix, modelToWorldMatrix);
+
+		// todo : 绕序检测
+
+		std::vector<SRVertex> vertexVec;
+		for (int i = 0; i < (*iter)->m_vertexVec.size(); ++i)
+		{
+			SRVertex ret = VertexShader(modelToWorldMatrix, (*iter)->m_vertexVec[i]);
+			vertexVec.push_back(ret);
+		}
+
+		// 透视投影
+		Matrix4x4 viewToProjectionMatrix;
+		m_camera->GetPerspectiveMatrix(viewToProjectionMatrix);
+		for (int i = 0; i < vertexVec.size(); ++i)
+		{
+			vertexVec[i].m_pos = MatrixMultiPoint(viewToProjectionMatrix, vertexVec[i].m_pos);
+		}
+
+		// todo : 规范化裁剪&重组
+
+		// 视口变换
+		Matrix4x4 projectionToScreenMatrix;
+		m_rasterizationMgr->GetViewPortMatrix(projectionToScreenMatrix);
+		for (int i = 0; i < vertexVec.size(); ++i)
+		{
+			vertexVec[i].m_pos = MatrixMultiPoint(projectionToScreenMatrix, vertexVec[i].m_pos);
+		}
+
+		// 光栅化
+		for (int i = 0; i < vertexVec.size() / 3; ++i)
+		{
+			m_rasterizationMgr->DrawTriangle(vertexVec[i * 3], vertexVec[i * 3 + 1], vertexVec[i * 3 + 2]);
+		}
 	}
-	// todo : 透视投影
-	// todo : 光照
-
-	// todo : 绕序检测
-	// todo : 裁剪
-
-	// todo : 视口变换
-
-	// todo : 深度检测
-
-	// todo : 光栅化
-	// todo : 纹理映射
 
 	CopyToScreen();
 }
 
 void SRSoftRender::CopyToScreen()
 {
-	g_pd3dDevice->BeginScene();
-
-	HRESULT ret = g_pd3dDevice->GetBackBuffer(0, 0, D3DBACKBUFFER_TYPE_MONO, &g_backBuffer);
-
-	D3DSURFACE_DESC surfacedesc;
-	HRESULT ret2 = g_backBuffer->GetDesc(&surfacedesc);
-	const TCHAR * message1 = DXGetErrorString(ret2);
-	const TCHAR * message2 = DXGetErrorDescription(ret2);
-
-	g_colorBuffer->CopyBufferToSurface(g_backBuffer);
-
-	g_pd3dDevice->EndScene();
-
-	// Present the backbuffer contents to the display
-	g_pd3dDevice->Present(NULL, NULL, NULL, NULL);
+	m_rasterizationMgr->CopyToScreen();
 }
 
-
-SRVertex SRSoftRender::VertexStage(Matrix4x4 modelToViewMatrix, SRVertex inVertex)
+SRVertex SRSoftRender::VertexShader(Matrix4x4 modelToViewMatrix, SRVertex inVertex)
 {
+	// todo : 光照
 	SRVertex ret;
 
-	ret.m_point = MatrixMultiPoint(modelToViewMatrix, inVertex.m_point);
+	ret.m_pos = MatrixMultiPoint(modelToViewMatrix, inVertex.m_pos);
 
 	return ret;
 }
@@ -140,5 +155,7 @@ void SRSoftRender::CleanUp()
 	if (g_pD3D != NULL)
 		g_pD3D->Release();
 }
+
+
 
 

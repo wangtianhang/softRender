@@ -107,7 +107,7 @@ public:
 
 struct SRVertex
 {
-	SRPoint m_point;
+	SRPoint m_pos;
 	SRVector m_normal;
 	SRColor m_color;
 	float m_tx;

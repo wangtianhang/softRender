@@ -70,6 +70,7 @@
     <ClCompile Include="SRCamera.cpp" />
     <ClCompile Include="SRColorBuffer.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="SRDepthBuffer.cpp" />
     <ClCompile Include="SRLight.cpp" />
     <ClCompile Include="SRMatrix.cpp" />
     <ClCompile Include="SRObj.cpp" />
@@ -80,6 +81,7 @@
   <ItemGroup>
     <ClInclude Include="SRCamera.h" />
     <ClInclude Include="SRCommonStruct.h" />
+    <ClInclude Include="SRDepthBuffer.h" />
     <ClInclude Include="SRLight.h" />
     <ClInclude Include="SRMatrix.h" />
     <ClInclude Include="SRColorBuffer.h" />

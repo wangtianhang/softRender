@@ -52,9 +52,9 @@ void SRObj::InitToCube()
 	for (int i = 0; i < 36; ++i)
 	{
 		SRVertex vertex;
-		vertex.m_point.x = cubeVertexPos[i];
-		vertex.m_point.y = cubeVertexPos[i + 1];
-		vertex.m_point.z = cubeVertexPos[i + 2];
+		vertex.m_pos.x = cubeVertexPos[i];
+		vertex.m_pos.y = cubeVertexPos[i + 1];
+		vertex.m_pos.z = cubeVertexPos[i + 2];
 		m_vertexVec.push_back(vertex);
 	}
 }

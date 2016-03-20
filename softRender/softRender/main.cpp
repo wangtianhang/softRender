@@ -126,6 +126,9 @@ INT WINAPI wWinMain(HINSTANCE hInst, HINSTANCE, LPWSTR, INT)
 	{
 		g_softRender = new SRSoftRender();
 		g_softRender->Init(hWnd, WIDTH, HEIGHT);
+
+		g_softRender->InitTestModel();
+		g_softRender->InitTestCamera();
 		// Create the vertex buffer
 // 		if (SUCCEEDED(InitVB()))
 // 		{
