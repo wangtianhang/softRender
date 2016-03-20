@@ -120,7 +120,7 @@ inline bool IsInScreen(int x, int y)
 }
 
 
-void SRRasterization::LineBres(int x0, int y0, SRColor color0, int xEnd, int yEnd, SRColor colorEnd)
+void SRRasterization::LineBres(int x0, int y0, SRVertex vertex0, int xEnd, int yEnd, SRVertex vertex1)
 {
 	int dx = abs(xEnd - x0), dy = abs(yEnd - y0);
 	int p = 2 * dy - dx;
@@ -142,15 +142,7 @@ void SRRasterization::LineBres(int x0, int y0, SRColor color0, int xEnd, int yEn
 
 	//float pointDistance = sqrtf((x - x0) * (x - x0) + (y - y0) * (y - y0));
 	//float weight = pointDistance / lineDistance;
-	float weight = GetWeight(x0, y0, xEnd, yEnd, x, y);
-	//float a = color0.a * (1 - weight) + colorEnd.a;
-	//float r = color0.r * (1 - weight) + colorEnd.r;
-	//float g = color0.g * (1 - weight) + colorEnd.g;
-	//float b = color0.b * (1 - weight) + colorEnd.b;
-	SRColor srColor = SRColor::Lerp(color0, colorEnd, weight);
-	D3DCOLOR color = D3DCOLOR_ARGB((int)(255 * srColor.a), (int)(255 * srColor.r), (int)(255 * srColor.g), (int)(255 * srColor.b));
-
-	g_colorBuffer->SetPixel(x, y, color);
+	FragmentStage(x0, y0, vertex0, xEnd, yEnd, vertex1, x, y);
 
 	while (x < xEnd)
 	{
@@ -165,26 +157,29 @@ void SRRasterization::LineBres(int x0, int y0, SRColor color0, int xEnd, int yEn
 			p += twoDyMinusDx;
 		}
 
-		//float pointDistance = sqrtf((x - x0) * (x - x0) + (y - y0) * (y - y0));
-		//float weight = pointDistance / lineDistance;
-		float weight = GetWeight(x0, y0, xEnd, yEnd, x, y);
-		//float a = color0.a * (1 - weight) + colorEnd.a;
-		//float r = color0.r * (1 - weight) + colorEnd.r;
-		//float g = color0.g * (1 - weight) + colorEnd.g;
-		//float b = color0.b * (1 - weight) + colorEnd.b;
-		SRColor srColor = SRColor::Lerp(color0, colorEnd, weight);
-		D3DCOLOR color = D3DCOLOR_ARGB((int)(255 * srColor.a), (int)(255 * srColor.r), (int)(255 * srColor.g), (int)(255 * srColor.b));
-
-		g_colorBuffer->SetPixel(x, y, color);
+		FragmentStage(x0, y0, vertex0, xEnd, yEnd, vertex1, x, y);
 	}
 }
 
-void SRRasterization::PixelStage(int x0, int y0, SRVertex vertex0, int x1, int y1, SRVertex vertex1, int x, int y)
+void SRRasterization::FragmentStage(int x0, int y0, SRVertex vertex0, int xEnd, int yEnd, SRVertex vertex1, int x, int y)
 {
+	// todo : 做好裁剪后应该不用判定这一步
+	if (!IsInScreen(x, y))
+	{
+		return;
+	}
+	float weight = GetWeight(x0, y0, xEnd, yEnd, x, y);
+	//float a = color0.a * (1 - weight) + colorEnd.a;
+	//float r = color0.r * (1 - weight) + colorEnd.r;
+	//float g = color0.g * (1 - weight) + colorEnd.g;
+	//float b = color0.b * (1 - weight) + colorEnd.b;
+	SRColor srColor = SRColor::Lerp(vertex0.m_color, vertex1.m_color, weight);
+	D3DCOLOR color = D3DCOLOR_ARGB((int)(255 * srColor.a), (int)(255 * srColor.r), (int)(255 * srColor.g), (int)(255 * srColor.b));
 
+	g_colorBuffer->SetPixel(x, y, color);
 }
 
-void SRRasterization::DrawTriangleBelowFlat2(int x1, int y1, SRColor color1, int x2, int y2, SRColor color2, int x3, int y3, SRColor color3)
+void SRRasterization::DrawTriangleBelowFlat2(int x1, int y1, SRVertex vertex1, int x2, int y2, SRVertex vertex2, int x3, int y3, SRVertex vertex3)
 {
 	for (int y = y1; y <= y2; ++y)
 	{
@@ -192,28 +187,28 @@ void SRRasterization::DrawTriangleBelowFlat2(int x1, int y1, SRColor color1, int
 		xs = (y - y1) * (x2 - x1) / (y2 - y1) + x1 + 0.5;
 		xe = (y - y1) * (x3 - x1) / (y3 - y1) + x1 + 0.5;
 
-		SRColor xsColor;
+		SRVertex xsVertex;
 		float weightS = GetWeight(x2, y2, x1, y1, xs, y);
 		//xsColor.a = color1.a * (1 - weightS) + color2.a;
 		//xsColor.r = color1.r * (1 - weightS) + color2.r;
 		//xsColor.g = color1.g * (1 - weightS) + color2.g;
 		//xsColor.b = color1.b * (1 - weightS) + color2.b;
-		xsColor = SRColor::Lerp(color2, color1, weightS);
+		xsVertex = SRVertex::Lerp(vertex2, vertex1, weightS);
 
-		SRColor xeColor;
+		SRVertex xeVertex;
 		float weightE = GetWeight(x1, y1, x3, y3, xe, y);
 
 		//xeColor.a = color2.a * (1 - weightS) + color3.a;
 		//xeColor.r = color2.r * (1 - weightS) + color3.r;
 		//xeColor.g = color2.g * (1 - weightS) + color3.g;
 		//xeColor.b = color2.b * (1 - weightS) + color3.b;
-		xeColor = SRColor::Lerp(color1, color3, weightE);
+		xeVertex = SRVertex::Lerp(vertex1, vertex3, weightE);
 
-		LineBres(xs, y, xsColor, xe, y, xeColor);
+		LineBres(xs, y, xsVertex, xe, y, xeVertex);
 	}
 }
 
-void SRRasterization::DrawTriangleTopFlat2(int x1, int y1, SRColor color1, int x2, int y2, SRColor color2, int x3, int y3, SRColor color3)
+void SRRasterization::DrawTriangleTopFlat2(int x1, int y1, SRVertex vertex1, int x2, int y2, SRVertex vertex2, int x3, int y3, SRVertex vertex3)
 {
 	for (int y = y1; y <= y3; ++y)
 	{
@@ -221,137 +216,137 @@ void SRRasterization::DrawTriangleTopFlat2(int x1, int y1, SRColor color1, int x
 		xs = (y - y1) * (x3 - x1) / (y3 - y1) + x1 + 0.5;
 		xe = (y - y2) * (x3 - x2) / (y3 - y2) + x2 + 0.5;
 
-		SRColor xsColor;
+		SRVertex xsVertex;
 		float weightS = GetWeight(x1, y1, x3, y3, xs, y);
 		//xsColor.a = color2.a * (1 - weightS) + color1.a;
 		//xsColor.r = color2.r * (1 - weightS) + color1.r;
 		//xsColor.g = color2.g * (1 - weightS) + color1.g;
 		//xsColor.b = color2.b * (1 - weightS) + color1.b;
-		xsColor = SRColor::Lerp(color1, color3, weightS);
+		xsVertex = SRVertex::Lerp(vertex1, vertex3, weightS);
 
-		SRColor xeColor;
+		SRVertex xeVertex;
 		float weightE = GetWeight(x3, y3, x2, y2, xe, y);
 
 		//xeColor.a = color1.a * (1 - weightS) + color3.a;
 		//xeColor.r = color1.r * (1 - weightS) + color3.r;
 		//xeColor.g = color1.g * (1 - weightS) + color3.g;
 		//xeColor.b = color1.b * (1 - weightS) + color3.b;
-		xeColor = SRColor::Lerp(color3, color2, weightE);
+		xeVertex = SRVertex::Lerp(vertex3, vertex2, weightE);
 
-		LineBres(xs, y, xsColor, xe, y, xeColor);
+		LineBres(xs, y, xsVertex, xe, y, xeVertex);
 	}
 }
 
-void SRRasterization::DrawTriangle(int x1, int y1, SRColor color1, int x2, int y2, SRColor color2, int x3, int y3, SRColor color3)
+void SRRasterization::DrawTriangle(int x1, int y1, SRVertex vertex1, int x2, int y2, SRVertex vertex2, int x3, int y3, SRVertex vertex3)
 {
 	if (y1 == y2)
 	{
 		if (y3 <= y1) // 平底  
 		{
-			DrawTriangleBelowFlat2(x3, y3, color3, x1, y1, color1, x2, y2, color2);
+			DrawTriangleBelowFlat2(x3, y3, vertex3, x1, y1, vertex1, x2, y2, vertex2);
 		}
 		else // 平顶  
 		{
-			DrawTriangleTopFlat2(x1, y1, color1, x2, y2, color2, x3, y3, color3);
+			DrawTriangleTopFlat2(x1, y1, vertex1, x2, y2, vertex2, x3, y3, vertex3);
 		}
 	}
 	else if (y1 == y3)
 	{
 		if (y2 <= y1) // 平底  
 		{
-			DrawTriangleBelowFlat2(x2, y2, color2, x1, y1, color1, x3, y3, color3);
+			DrawTriangleBelowFlat2(x2, y2, vertex2, x1, y1, vertex1, x3, y3, vertex3);
 		}
 		else // 平顶  
 		{
-			DrawTriangleTopFlat2(x1, y1, color1, x3, y3, color3, x2, y2, color2);
+			DrawTriangleTopFlat2(x1, y1, vertex1, x3, y3, vertex3, x2, y2, vertex2);
 		}
 	}
 	else if (y2 == y3)
 	{
 		if (y1 <= y2) // 平底  
 		{
-			DrawTriangleBelowFlat2(x1, y1, color1, x2, y2, color2, x3, y3, color3);
+			DrawTriangleBelowFlat2(x1, y1, vertex1, x2, y2, vertex2, x3, y3, vertex3);
 		}
 		else // 平顶  
 		{
-			DrawTriangleTopFlat2(x2, y2, color2, x3, y3, color3, x1, y1, color1);
+			DrawTriangleTopFlat2(x2, y2, vertex2, x3, y3, vertex3, x1, y1, vertex1);
 		}
 	}
 	else
 	{
 		double xtop, ytop, xmiddle, ymiddle, xbottom, ybottom;
-		SRColor topColor, middleColr, bottomColor, longSideMiddleColor;
+		SRVertex topVertex, middleVertex, bottomVertex, longSideMiddleVertex;
 		if (y1 < y2 && y2 < y3) // y1 y2 y3  
 		{
 			xtop = x1;
 			ytop = y1;
-			topColor = color1;
+			topVertex = vertex1;
 			xmiddle = x2;
 			ymiddle = y2;
-			middleColr = color2;
+			middleVertex = vertex2;
 			xbottom = x3;
 			ybottom = y3;
-			bottomColor = color3;
+			bottomVertex = vertex3;
 		}
 		else if (y1 < y3 && y3 < y2) // y1 y3 y2  
 		{
 			xtop = x1;
 			ytop = y1;
-			topColor = color1;
+			topVertex = vertex1;
 			xmiddle = x3;
 			ymiddle = y3;
-			middleColr = color3;
+			middleVertex = vertex3;
 			xbottom = x2;
 			ybottom = y2;
-			bottomColor = color2;
+			bottomVertex = vertex2;
 		}
 		else if (y2 < y1 && y1 < y3) // y2 y1 y3  
 		{
 			xtop = x2;
 			ytop = y2;
-			topColor = color2;
+			topVertex = vertex2;
 			xmiddle = x1;
 			ymiddle = y1;
-			middleColr = color1;
+			middleVertex = vertex1;
 			xbottom = x3;
 			ybottom = y3;
-			bottomColor = color3;
+			bottomVertex = vertex3;
 		}
 		else if (y2 < y3 && y3 < y1) // y2 y3 y1  
 		{
 			xtop = x2;
 			ytop = y2;
-			topColor = color2;
+			topVertex = vertex2;
 			xmiddle = x3;
 			ymiddle = y3;
-			middleColr = color3;
+			middleVertex = vertex3;
 			xbottom = x1;
 			ybottom = y1;
-			bottomColor = color1;
+			bottomVertex = vertex1;
 		}
 		else if (y3 < y1 && y1 < y2) // y3 y1 y2  
 		{
 			xtop = x3;
 			ytop = y3;
-			topColor = color3;
+			topVertex = vertex3;
 			xmiddle = x1;
 			ymiddle = y1;
-			middleColr = color1;
+			middleVertex = vertex1;
 			xbottom = x2;
 			ybottom = y2;
-			bottomColor = color2;
+			bottomVertex = vertex2;
 		}
 		else if (y3 < y2 && y2 < y1) // y3 y2 y1  
 		{
 			xtop = x3;
 			ytop = y3;
-			topColor = color3;
+			topVertex = vertex3;
 			xmiddle = x2;
 			ymiddle = y2;
-			middleColr = color2;
+			middleVertex = vertex2;
 			xbottom = x1;
 			ybottom = y1;
-			bottomColor = color1;
+			bottomVertex = vertex1;
 		}
 		int xlongSide; // 长边在ymiddle时的x，来决定长边是在左边还是右边  
 		xlongSide = (ymiddle - ytop) * (xbottom - xtop) / (ybottom - ytop) + xtop + 0.5;
@@ -361,24 +356,24 @@ void SRRasterization::DrawTriangle(int x1, int y1, SRColor color1, int x2, int y
 		{
 			float weight = GetWeight(xbottom, ybottom, xtop, ytop, xlongSide, ymiddle);
 
-			longSideMiddleColor = SRColor::Lerp(bottomColor, topColor, weight);
+			longSideMiddleVertex = SRVertex::Lerp(bottomVertex, topVertex, weight);
 			// 画平底  
-			DrawTriangleBelowFlat2(xtop, ytop, topColor, xlongSide, ymiddle, longSideMiddleColor, xmiddle, ymiddle, middleColr);
+			DrawTriangleBelowFlat2(xtop, ytop, topVertex, xlongSide, ymiddle, longSideMiddleVertex, xmiddle, ymiddle, middleVertex);
 
 			// 画平顶  
-			DrawTriangleTopFlat2(xlongSide, ymiddle, longSideMiddleColor, xmiddle, ymiddle, middleColr, xbottom, ybottom, bottomColor);
+			DrawTriangleTopFlat2(xlongSide, ymiddle, longSideMiddleVertex, xmiddle, ymiddle, middleVertex, xbottom, ybottom, bottomVertex);
 		}
 		else // 右三角形  
 		{
 			float weight = GetWeight(xbottom, ybottom, xtop, ytop, xlongSide, ymiddle);
 
-			longSideMiddleColor = SRColor::Lerp(bottomColor, topColor, weight);
+			longSideMiddleVertex = SRVertex::Lerp(bottomVertex, topVertex, weight);
 
 			// 画平底  
-			DrawTriangleBelowFlat2(xtop, ytop, topColor, xmiddle, ymiddle, middleColr, xlongSide, ymiddle, longSideMiddleColor);
+			DrawTriangleBelowFlat2(xtop, ytop, topVertex, xmiddle, ymiddle, middleVertex, xlongSide, ymiddle, longSideMiddleVertex);
 
 			// 画平顶  
-			DrawTriangleTopFlat2(xmiddle, ymiddle, middleColr, xlongSide, ymiddle, longSideMiddleColor, xbottom, ybottom, bottomColor);
+			DrawTriangleTopFlat2(xmiddle, ymiddle, middleVertex, xlongSide, ymiddle, longSideMiddleVertex, xbottom, ybottom, bottomVertex);
 		}
 	}
 }

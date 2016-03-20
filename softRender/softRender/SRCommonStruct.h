@@ -94,6 +94,15 @@ struct SRVertex
 	SRColor m_color;
 	float m_tx;
 	float m_ty;
+
+	static SRVertex Lerp(SRVertex left, SRVertex right, float weight)
+	{
+		SRVertex ret;
+
+		ret.m_color = SRColor::Lerp(left.m_color, right.m_color, weight);
+		
+		return ret;
+	}
 };
 
 typedef float Matrix4x4[4][4];
