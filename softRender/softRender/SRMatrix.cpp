@@ -160,7 +160,7 @@ SRPoint MatrixMultiPoint(Matrix4x4 m1, SRPoint point)
 	ret.y = m1.m10 * point.x + m1.m11 * point.y + m1.m12 * point.z + m1.m13 * point.w;
 	ret.z = m1.m20 * point.x + m1.m21 * point.y + m1.m22 * point.z + m1.m23 * point.w;
 	ret.w = m1.m30 * point.x + m1.m31 * point.y + m1.m32 * point.z + m1.m33 * point.w;
-	return point;
+	return ret;
 }
 
 SRVector MatrixMultiVector(Matrix4x4 m1, SRVector vector)

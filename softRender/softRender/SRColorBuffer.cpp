@@ -2,6 +2,8 @@
 #include <d3d9.h>
 #include <DxErr.h>
 
+#include <memory.h>
+
 #include "SRColorBuffer.h"
 
 
@@ -37,3 +39,15 @@ void SRColorBuffer::CopyBufferToSurface(LPDIRECT3DSURFACE9 pSurface)
 
 	pSurface->UnlockRect();
 }
+
+void SRColorBuffer::ClearBuffer()
+{
+	for (int i = 0; i < m_height; ++i)
+	{
+		for (int j = 0; j < m_width; ++j)
+		{
+			m_pBuffer[i * m_width + j] = 0;
+		}
+	}
+}
+

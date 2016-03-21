@@ -17,6 +17,8 @@ public:
 		return ret;
 	}
 
+	void ClearBuffer();
+
 	float * m_pDepthArray;
 	int m_width = 0;
 	int m_height = 0;

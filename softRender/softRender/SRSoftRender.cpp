@@ -86,14 +86,14 @@ void SRSoftRender::Render()
 		m_camera->GetWorldToViewMatrix(worldToViewMatrix);
 
 		Matrix4x4 modelToViewMatrix;
-		MatrixMultiMatrix(worldToViewMatrix, modelToWorldMatrix, modelToWorldMatrix);
+		MatrixMultiMatrix(worldToViewMatrix, modelToWorldMatrix, modelToViewMatrix);
 
 		// todo : 绕序检测
 
 		std::vector<SRVertex> vertexVec;
 		for (int i = 0; i < (*iter)->m_vertexVec.size(); ++i)
 		{
-			SRVertex ret = VertexShader(modelToWorldMatrix, (*iter)->m_vertexVec[i]);
+			SRVertex ret = VertexShader(modelToViewMatrix, (*iter)->m_vertexVec[i]);
 			vertexVec.push_back(ret);
 		}
 
@@ -103,6 +103,7 @@ void SRSoftRender::Render()
 		for (int i = 0; i < vertexVec.size(); ++i)
 		{
 			vertexVec[i].m_pos = MatrixMultiPoint(viewToProjectionMatrix, vertexVec[i].m_pos);
+			vertexVec[i].m_pos = vertexVec[i].m_pos / vertexVec[i].m_pos.w;
 		}
 
 		// todo : 规范化裁剪&重组
@@ -116,6 +117,7 @@ void SRSoftRender::Render()
 		}
 
 		// 光栅化
+		m_rasterizationMgr->ClearBuffer();
 		for (int i = 0; i < vertexVec.size() / 3; ++i)
 		{
 			m_rasterizationMgr->DrawTriangle(vertexVec[i * 3], vertexVec[i * 3 + 1], vertexVec[i * 3 + 2]);
@@ -136,6 +138,8 @@ SRVertex SRSoftRender::VertexShader(Matrix4x4 modelToViewMatrix, SRVertex inVert
 	SRVertex ret;
 
 	ret.m_pos = MatrixMultiPoint(modelToViewMatrix, inVertex.m_pos);
+
+	ret.m_color = inVertex.m_color;
 
 	return ret;
 }

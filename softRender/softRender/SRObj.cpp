@@ -8,47 +8,47 @@ void SRObj::GetObjToWorldMatrix(Matrix4x4 outMatrix)
 
 void SRObj::InitToCube()
 {
-	float cubeVertexPos[] = 
+	float cubeVertexPos[] =
 	{
 		-1.0f, -1.0f, -1.0f, // triangle 1 : begin
-		 - 1.0f, -1.0f, 1.0f,
-		 - 1.0f, 1.0f, 1.0f, // triangle 1 : end
-		     1.0f, 1.0f, -1.0f, // triangle 2 : begin
-		 - 1.0f, -1.0f, -1.0f,
-		 - 1.0f, 1.0f, -1.0f, // triangle 2 : end
-		     1.0f, -1.0f, 1.0f,
-		 - 1.0f, -1.0f, -1.0f,
-		     1.0f, -1.0f, -1.0f,
-		     1.0f, 1.0f, -1.0f,
-		     1.0f, -1.0f, -1.0f,
-		 - 1.0f, -1.0f, -1.0f,
-		 - 1.0f, -1.0f, -1.0f,
-		 - 1.0f, 1.0f, 1.0f,
-		 - 1.0f, 1.0f, -1.0f,
-		     1.0f, -1.0f, 1.0f,
-		 - 1.0f, -1.0f, 1.0f,
-		 - 1.0f, -1.0f, -1.0f,
-		 - 1.0f, 1.0f, 1.0f,
-		 - 1.0f, -1.0f, 1.0f,
-		     1.0f, -1.0f, 1.0f,
-		     1.0f, 1.0f, 1.0f,
-		     1.0f, -1.0f, -1.0f,
-		     1.0f, 1.0f, -1.0f,
-		     1.0f, -1.0f, -1.0f,
-		     1.0f, 1.0f, 1.0f,
-		     1.0f, -1.0f, 1.0f,
-		     1.0f, 1.0f, 1.0f,
-		     1.0f, 1.0f, -1.0f,
-		 - 1.0f, 1.0f, -1.0f,
-		     1.0f, 1.0f, 1.0f,
-		 - 1.0f, 1.0f, -1.0f,
-		 - 1.0f, 1.0f, 1.0f,
-		     1.0f, 1.0f, 1.0f,
-		 - 1.0f, 1.0f, 1.0f,
-		     1.0f, -1.0f, 1.0f
+		-1.0f, -1.0f, 1.0f,
+		-1.0f, 1.0f, 1.0f, // triangle 1 : end
+		1.0f, 1.0f, -1.0f, // triangle 2 : begin
+		-1.0f, -1.0f, -1.0f,
+		-1.0f, 1.0f, -1.0f, // triangle 2 : end
+		1.0f, -1.0f, 1.0f,
+		-1.0f, -1.0f, -1.0f,
+		1.0f, -1.0f, -1.0f,
+		1.0f, 1.0f, -1.0f,
+		1.0f, -1.0f, -1.0f,
+		-1.0f, -1.0f, -1.0f,
+		-1.0f, -1.0f, -1.0f,
+		-1.0f, 1.0f, 1.0f,
+		-1.0f, 1.0f, -1.0f,
+		1.0f, -1.0f, 1.0f,
+		-1.0f, -1.0f, 1.0f,
+		-1.0f, -1.0f, -1.0f,
+		-1.0f, 1.0f, 1.0f,
+		-1.0f, -1.0f, 1.0f,
+		1.0f, -1.0f, 1.0f,
+		1.0f, 1.0f, 1.0f,
+		1.0f, -1.0f, -1.0f,
+		1.0f, 1.0f, -1.0f,
+		1.0f, -1.0f, -1.0f,
+		1.0f, 1.0f, 1.0f,
+		1.0f, -1.0f, 1.0f,
+		1.0f, 1.0f, 1.0f,
+		1.0f, 1.0f, -1.0f,
+		-1.0f, 1.0f, -1.0f,
+		1.0f, 1.0f, 1.0f,
+		-1.0f, 1.0f, -1.0f,
+		-1.0f, 1.0f, 1.0f,
+		1.0f, 1.0f, 1.0f,
+		-1.0f, 1.0f, 1.0f,
+		1.0f, -1.0f, 1.0f
 	};
 
-	float cubeVertexColor[] = 
+	float cubeVertexColor[] =
 	{
 		0.583f, 0.771f, 0.014f,
 		0.609f, 0.115f, 0.436f,
@@ -95,6 +95,10 @@ void SRObj::InitToCube()
 		vertex.m_pos.x = cubeVertexPos[i * 3];
 		vertex.m_pos.y = cubeVertexPos[i * 3 + 1];
 		vertex.m_pos.z = cubeVertexPos[i * 3 + 2];
+
+		vertex.m_color.r = cubeVertexColor[i * 3];
+		vertex.m_color.g = cubeVertexColor[i * 3 + 1];
+		vertex.m_color.b = cubeVertexColor[i * 3 + 2];
 		m_vertexVec.push_back(vertex);
 	}
 }

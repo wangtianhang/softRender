@@ -22,6 +22,8 @@ public:
 
 	void CopyToScreen();
 
+	void ClearBuffer();
+
 private:
 	// 画实心平底三角形
 	void DrawTriangleBelowFlat2(int x1, int y1, SRVertex vertex1, int x2, int y2, SRVertex vertex2, int x3, int y3, SRVertex vertex3);

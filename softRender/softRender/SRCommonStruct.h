@@ -25,7 +25,28 @@ struct SRPoint
 	float y;
 	float z;
 	float w;
+
+public:
+	static SRPoint Lerp(SRPoint left, SRPoint right, float weight)
+	{
+		SRPoint ret;
+		ret.x = left.x * (1 - weight) + right.x * weight;
+		ret.y = left.y * (1 - weight) + right.y * weight;
+		ret.z = left.z * (1 - weight) + right.z * weight;
+		ret.w = left.w * (1 - weight) + right.w * weight;
+		return ret;
+	}
 };
+
+inline SRPoint operator / (SRPoint left, float num)
+{
+	SRPoint ret;
+	ret.x = left.x / num;
+	ret.y = left.y / num;
+	ret.z = left.z / num;
+	ret.w = left.w / num;
+	return ret;
+}
 
 struct SRVector
 {
@@ -117,6 +138,7 @@ struct SRVertex
 	{
 		SRVertex ret;
 
+		ret.m_pos = SRPoint::Lerp(left.m_pos, right.m_pos, weight);
 		ret.m_color = SRColor::Lerp(left.m_color, right.m_color, weight);
 		
 		return ret;

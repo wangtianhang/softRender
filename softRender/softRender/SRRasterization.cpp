@@ -353,4 +353,10 @@ SRColor SRRasterization::PixelShader(SRFragment srFragment)
 	return srFragment.m_color;
 }
 
+void SRRasterization::ClearBuffer()
+{
+	m_depthBuffer->ClearBuffer();
+	m_colorBuffer->ClearBuffer();
+}
+
 
