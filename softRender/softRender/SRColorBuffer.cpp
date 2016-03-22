@@ -41,10 +41,10 @@ void SRColorBuffer::CopyBufferToSurface(LPDIRECT3DSURFACE9 pSurface)
 				//std::cout << i << " " << j << depth << std::endl;
 				std::string output = "";
 				char c[50];
-				_itoa_s(i, c, 10);
+				_itoa_s(j, c, 10);
 				output += c;
 				output += " ";
-				_itoa_s(j, c, 10);
+				_itoa_s(i, c, 10);
 				output += c;
 				output += " ";
 				_gcvt_s(c, 50, depth, 30);

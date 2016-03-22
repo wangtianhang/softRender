@@ -325,7 +325,11 @@ void SRRasterization::HandleFragment(int x0, int y0, SRVertex & vertex0, int xEn
 		float distance = Lerp(vertex0.m_pos.z, vertex1.m_pos.z, weight);
 		float cacheDistance = m_depthBuffer->GetDepth(x, y);
 
-		if (cacheDistance != FLT_MAX)
+// 		if (cacheDistance != FLT_MAX)
+// 		{
+// 			int test = 0;
+// 		}
+		if (x == 281 && y == 203)
 		{
 			int test = 0;
 		}
