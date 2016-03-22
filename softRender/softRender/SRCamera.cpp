@@ -25,7 +25,7 @@ SRCamera::SRCamera(SRPoint pos, SRVector u, SRVector v, int width, int height)
 	m_far = 100;
 	m_fovRadTheta = ConvertDegToRad(60);
 	//m_fovRadTheta = m_fovRadTheta / ;
-	m_aspect = (float)height / width;
+	m_aspect = (float)width / height;
 }
 
 void SRCamera::GetWorldToViewMatrix(Matrix4x4 & outMatrix)
