@@ -38,7 +38,19 @@ void SRColorBuffer::CopyBufferToSurface(LPDIRECT3DSURFACE9 pSurface)
 			if (m_pBuffer[i * m_width + j] != 0)
 			{
 				float depth = m_pDepthBuffer->GetDepth(j, i);
-				std::cout << i << " " << j << depth << std::endl;
+				//std::cout << i << " " << j << depth << std::endl;
+				std::string output = "";
+				char c[50];
+				_itoa_s(i, c, 10);
+				output += c;
+				output += " ";
+				_itoa_s(j, c, 10);
+				output += c;
+				output += " ";
+				_gcvt_s(c, 50, depth, 30);
+				output += c;
+				output += "\n";
+				OutputDebugString(output.c_str());
 			}
 			pColorArray[i * m_width + j] = m_pBuffer[i * m_width + j];
 		}

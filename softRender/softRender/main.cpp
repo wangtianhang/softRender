@@ -15,6 +15,8 @@ SRSoftRender * g_softRender = NULL;
 const int WIDTH = 640;
 const int HEIGHT = 480;
 
+int g_counter = 0;
+
 // A structure for our custom vertex type
 //struct CUSTOMVERTEX
 //{
@@ -75,8 +77,11 @@ VOID Render()
 	//DrawTriangle(100, 200, red, 200, 100, green, 200, 300, blue);
 
 
-
-	g_softRender->Render();
+	if (g_counter < 1)
+	{
+		g_counter++;
+		g_softRender->Render();
+	}
 }
 
 
@@ -111,12 +116,12 @@ INT WINAPI wWinMain(HINSTANCE hInst, HINSTANCE, LPWSTR, INT)
 	{
 		sizeof(WNDCLASSEX), CS_CLASSDC, MsgProc, 0L, 0L,
 		GetModuleHandle(NULL), NULL, NULL, NULL, NULL,
-		L"softRender", NULL
+		"softRender", NULL
 	};
 	RegisterClassEx(&wc);
 
 	// Create the application's window
-	HWND hWnd = CreateWindow(L"softRender", L"softRenderInstance",
+	HWND hWnd = CreateWindow("softRender", "softRenderInstance",
 		WS_OVERLAPPED | WS_SYSMENU, 100, 100, WIDTH, HEIGHT,
 		NULL, NULL, wc.hInstance, NULL);
 
@@ -152,6 +157,6 @@ INT WINAPI wWinMain(HINSTANCE hInst, HINSTANCE, LPWSTR, INT)
 /*		}*/
 	}
 
-	UnregisterClass(L"softRender", wc.hInstance);
+	UnregisterClass("softRender", wc.hInstance);
 	return 0;
 }
