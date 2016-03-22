@@ -1,6 +1,8 @@
 #include <d3d9.h>
 #include <DxErr.h>
 
+#include <float.h>
+
 #include "SRRasterization.h"
 
 #include "SRMatrix.h"
@@ -40,8 +42,9 @@ SRRasterization::SRRasterization(int width, int height)
 	m_width = width;
 	m_height = height;
 
-	m_colorBuffer = new SRColorBuffer(width, height);
 	m_depthBuffer = new SRDepthBuffer(width, height);
+	m_colorBuffer = new SRColorBuffer(width, height, m_depthBuffer);
+	
 }
 
 void SRRasterization::DrawTriangle(SRVertex vertex1, SRVertex vertex2, SRVertex vertex3)
@@ -61,6 +64,8 @@ void SRRasterization::DrawTriangle(SRVertex vertex1, SRVertex vertex2, SRVertex 
 	{
 		return;
 	}
+
+	triangleCounter++;
 
 	if (y1 == y2)
 	{
@@ -313,20 +318,30 @@ void SRRasterization::LineBres(int x0, int y0, SRVertex vertex0, int xEnd, int y
 
 void SRRasterization::HandleFragment(int x0, int y0, SRVertex & vertex0, int xEnd, int yEnd, SRVertex & vertex1, int x, int y)
 {
-	// todo : 做好裁剪后应该不用判定这一步
+	// todo : 做好规范体裁剪后应该不用判定这一步
 	if (IsInScreen(x, y))
 	{
 		float weight = GetWeight(x0, y0, xEnd, yEnd, x, y);
-		float distace = Lerp(vertex0.m_pos.z, vertex1.m_pos.z, weight);
+		float distance = Lerp(vertex0.m_pos.z, vertex1.m_pos.z, weight);
 		float cacheDistance = m_depthBuffer->GetDepth(x, y);
-		if (distace < cacheDistance)
+
+		if (cacheDistance != FLT_MAX)
+		{
+			int test = 0;
+		}
+
+		if (distance < cacheDistance)
 		{
 			SRColor srColor = SRColor::Lerp(vertex0.m_color, vertex1.m_color, weight);
 			SRFragment srFragment;
 			srFragment.m_color = srColor;
 			SRColor color = PixelShader(srFragment);
 			m_colorBuffer->SetPixel(x, y, color);
-			m_depthBuffer->SetDepth(x, y, distace);
+			m_depthBuffer->SetDepth(x, y, distance);
+		}
+		else
+		{
+			int test = 0;
 		}
 	}
 }
@@ -357,6 +372,8 @@ void SRRasterization::ClearBuffer()
 {
 	m_depthBuffer->ClearBuffer();
 	m_colorBuffer->ClearBuffer();
+
+	triangleCounter = 0;
 }
 
 

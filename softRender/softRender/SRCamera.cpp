@@ -28,6 +28,11 @@ SRCamera::SRCamera(SRPoint pos, SRVector u, SRVector v, int width, int height)
 	m_aspect = (float)width / height;
 }
 
+SRCamera::SRCamera(SRPoint pos, float eulerX, float eulerY, float eulerZ, int width, int height)
+{
+	// 一个物体分别绕自己的xyz坐标轴旋转αβγ角度相当于物体绕世界坐标轴的zyx分别旋转γβα角度
+}
+
 void SRCamera::GetWorldToViewMatrix(Matrix4x4 & outMatrix)
 {
 	Matrix4x4 t;

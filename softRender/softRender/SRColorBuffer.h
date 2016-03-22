@@ -5,11 +5,13 @@
 
 #include "SRCommonStruct.h"
 
+class SRDepthBuffer;
+
 class SRColorBuffer
 {
 
 public:
-	SRColorBuffer(int width, int height);
+	SRColorBuffer(int width, int height, SRDepthBuffer * pDepthBuffer);
 	inline void SetPixel(int x, int y, SRColor srColor)
 	{
 		D3DCOLOR color = D3DCOLOR_ARGB((int)(255 * srColor.a), (int)(255 * srColor.r), (int)(255 * srColor.g), (int)(255 * srColor.b));
@@ -23,6 +25,7 @@ private:
 	int m_width = 0;
 	int m_height = 0;
 	D3DCOLOR * m_pBuffer = NULL;
+	SRDepthBuffer * m_pDepthBuffer = NULL;
 };
 
 #endif // !COLORBUFFER

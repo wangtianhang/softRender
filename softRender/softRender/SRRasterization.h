@@ -46,6 +46,8 @@ private:
 
 	int m_width;
 	int m_height;
+
+	int triangleCounter = 0;
 };
 
 #endif

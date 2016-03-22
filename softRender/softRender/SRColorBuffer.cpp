@@ -4,15 +4,17 @@
 
 #include <memory.h>
 
+#include <iostream>
+
 #include "SRColorBuffer.h"
+#include "SRDepthBuffer.h"
 
-
-
-SRColorBuffer::SRColorBuffer(int width, int height)
+SRColorBuffer::SRColorBuffer(int width, int height, SRDepthBuffer * pDepthBuffer)
 {
 	m_width = width;
 	m_height = height;
 	m_pBuffer = new D3DCOLOR[width * height]();
+	m_pDepthBuffer = pDepthBuffer;
 }
 
 // void SRColorBuffer::SetPixel(int x, int y, SRColor srColor)
@@ -33,6 +35,11 @@ void SRColorBuffer::CopyBufferToSurface(LPDIRECT3DSURFACE9 pSurface)
 	{
 		for (int j = 0; j < m_width; ++j)
 		{
+			if (m_pBuffer[i * m_width + j] != 0)
+			{
+				float depth = m_pDepthBuffer->GetDepth(j, i);
+				std::cout << i << " " << j << depth << std::endl;
+			}
 			pColorArray[i * m_width + j] = m_pBuffer[i * m_width + j];
 		}
 	}
