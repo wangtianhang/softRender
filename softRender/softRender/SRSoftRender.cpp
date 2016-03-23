@@ -117,7 +117,7 @@ void SRSoftRender::Render()
 		for (int i = 0; i < vertexVec.size(); ++i)
 		{
 			vertexVec[i].m_pos = MatrixMultiPoint(projectionToScreenMatrix, vertexVec[i].m_pos);
-			
+			vertexVec[i].m_pos.y = m_height - vertexVec[i].m_pos.y;
 		}
 
 		// ¹âÕ¤»¯
