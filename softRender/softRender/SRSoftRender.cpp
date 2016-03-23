@@ -70,10 +70,13 @@ void SRSoftRender::InitTestModel()
 
 void SRSoftRender::InitTestCamera()
 {
-	SRPoint cameraPos = SRPoint(0, 0, 10);
-	SRVector cameraRight = SRVector(1, 0, 0);
-	SRVector cameraUp = SRVector(0, 1, 0);
-	m_camera = new SRCamera(cameraPos, cameraRight, cameraUp, m_width, m_height);
+	//SRPoint cameraPos = SRPoint(0, 0, 10);
+	//SRVector cameraRight = SRVector(1, 0, 0);
+	//SRVector cameraUp = SRVector(0, 1, 0);
+	//m_camera = new SRCamera(cameraPos, cameraRight, cameraUp, m_width, m_height);
+
+	SRPoint cameraPos = SRPoint(10, 10, 10);
+	m_camera = new SRCamera(cameraPos, -45, 45, 0, m_width, m_height);
 }
 
 void SRSoftRender::Render()

@@ -17,20 +17,53 @@ float ConvertDegToRad(float deg)
 SRCamera::SRCamera(SRPoint pos, SRVector u, SRVector v, int width, int height)
 {
 	m_pos = pos;
-	m_u = u.GetNormaliseVector();
-	m_v = v.GetNormaliseVector();
-	m_n = SRVector::GetCrossVector(m_u, m_v);
-
 	m_near = 0.1f;
 	m_far = 100;
 	m_fovRadTheta = ConvertDegToRad(60);
 	//m_fovRadTheta = m_fovRadTheta / ;
 	m_aspect = (float)width / height;
+
+	m_u = u.GetNormaliseVector();
+	m_v = v.GetNormaliseVector();
+	m_n = SRVector::GetCrossVector(m_u, m_v);
+
+
 }
 
 SRCamera::SRCamera(SRPoint pos, float eulerX, float eulerY, float eulerZ, int width, int height)
 {
+	m_pos = pos;
+	m_near = 0.1f;
+	m_far = 100;
+	m_fovRadTheta = ConvertDegToRad(60);
+	m_aspect = (float)width / height;
 	// 一个物体分别绕自己的xyz坐标轴旋转αβγ角度相当于物体绕世界坐标轴的zyx分别旋转γβα角度
+	SRVector right = SRVector(1, 0, 0);
+	SRVector up = SRVector(0, 1, 0);
+	SRVector normal = SRVector(0, 0, 1);
+
+	float radX = ConvertDegToRad(eulerX);
+	float radY = ConvertDegToRad(eulerY);
+	float radZ = ConvertDegToRad(eulerZ);
+
+	Matrix4x4 rotateByX;
+	PointRotateByX(radX, rotateByX);
+	Matrix4x4 rotateByY;
+	PointRotateByY(radY, rotateByY);
+	Matrix4x4 rotateByZ;
+	PointRotateByZ(radZ, rotateByZ);
+
+	Matrix4x4 tmpYX;
+	MatrixMultiMatrix(rotateByY, rotateByX, tmpYX);
+	Matrix4x4 finalZYX;
+	MatrixMultiMatrix(rotateByZ, tmpYX, finalZYX);
+
+	m_u = MatrixMultiVector(finalZYX, right);
+	m_u = m_u.GetNormaliseVector();
+	m_v = MatrixMultiVector(finalZYX, up);
+	m_v = m_v.GetNormaliseVector();
+	m_n = MatrixMultiVector(finalZYX, normal);
+	m_n = m_n.GetNormaliseVector();
 }
 
 void SRCamera::GetWorldToViewMatrix(Matrix4x4 & outMatrix)
