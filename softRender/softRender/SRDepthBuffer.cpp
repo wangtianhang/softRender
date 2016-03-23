@@ -22,7 +22,7 @@ void SRDepthBuffer::ClearBuffer()
 	{
 		for (int j = 0; j < m_width; ++j)
 		{
-			m_pDepthArray[i * m_width + j] = FLT_MAX;
+			m_pDepthArray[i * m_width + j] = FLT_MIN;
 		}
 	}
 }

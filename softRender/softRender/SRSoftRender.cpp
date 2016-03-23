@@ -103,6 +103,7 @@ void SRSoftRender::Render()
 		for (int i = 0; i < vertexVec.size(); ++i)
 		{
 			vertexVec[i].m_pos = MatrixMultiPoint(viewToProjectionMatrix, vertexVec[i].m_pos);
+			vertexVec[i].m_pos = vertexVec[i].m_pos / vertexVec[i].m_pos.w;
 		}
 
 		// todo : 规范化裁剪&重组
@@ -113,7 +114,7 @@ void SRSoftRender::Render()
 		for (int i = 0; i < vertexVec.size(); ++i)
 		{
 			vertexVec[i].m_pos = MatrixMultiPoint(projectionToScreenMatrix, vertexVec[i].m_pos);
-			vertexVec[i].m_pos = vertexVec[i].m_pos / vertexVec[i].m_pos.w;
+			
 		}
 
 		// 光栅化

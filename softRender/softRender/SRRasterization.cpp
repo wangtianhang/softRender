@@ -334,7 +334,7 @@ void SRRasterization::HandleFragment(int x0, int y0, SRVertex & vertex0, int xEn
 			int test = 0;
 		}
 
-		if (distance < cacheDistance)
+		if (distance > cacheDistance)
 		{
 			SRColor srColor = SRColor::Lerp(vertex0.m_color, vertex1.m_color, weight);
 			SRFragment srFragment;
